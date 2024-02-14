@@ -22,7 +22,7 @@ export default function Modal({ show, children, onClose }:ModalProps ) {
                         className=" "
                         onClick={onClose}
                         >
-                        <img className="block w-6 h-6" src="/imgs/closeIMG.png" alt="notWorking"/>
+                        <img className="block w-6 h-6" src="/images/closeIMG.png" alt="notWorking"/>
                     </button>
                 </div>
                 <div className="mt-3 text-center">
