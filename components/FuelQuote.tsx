@@ -37,7 +37,7 @@ export default function FuelQuote() {
             </div>
             <span className="text-black">suggested price</span><br/>
             <span className="text-black"> total amount due</span>
-            <div className="flex items-center justify-between">
+            <div className="flex justify-center">
                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Submit
                 </button>

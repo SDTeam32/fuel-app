@@ -22,21 +22,36 @@ export default function dashboard() {
     }
     return (
         <main className="p-4 md:p-10 mx-auto max-w-7xl">
-            <Title>Quotes</Title>
-            <Text>A list of Quotes retrieved from Supabase. (not connected yet)</Text>
-            {/* <Search /> implement later*/}
-            
-            <button
-                onClick={handleNewQuote}
-                className="p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
-                aria-label="Add new quote"
-            >Add a new Quote</button>
-            <Card className="mt-6">
+            <div className='flex justify-between'>
+                <div>
+                        <Title>Quotes</Title>
+                        <Text>A list of Quotes retrieved from Supabase. (not connected yet)</Text>
+                        {/* <Search /> implement later*/}
+                    </div>
+                    <div className='flex justify-end items-end	' style={{marginLeft:"8.8rem"}}>
+                        <button
+                                onClick={handleNewQuote}
+                                className=" flex items-center justify-center bg-blue-500 w-28 h-8 rounded"
+                                aria-label="Add new quote"
+                        >
+                            <img src='/imgs/plusBtn2.png' alt='notworking' className='filter invert w-5 h-5  mr-2'/>
+                            <span className='text-white  text-xs align-middle  text-center	' >New Quote</span>
+                        </button>
+                </div>
+            </div>
+                
+               
+            <Card className="mt-6" style={{marginTop:".5rem"}}>
                 <QuotesTable quotes={quotes} />
             </Card>
             <Modal show={showQuote} onClose={() => setShowQuote(false)}>
                 <FuelQuote />
             </Modal>
+            {/* <button>
+                <img src="" alt="" />
+                <span>ADD</span>
+            </button> */}
         </main>
+        
     )
 };
