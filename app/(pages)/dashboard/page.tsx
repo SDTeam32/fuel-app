@@ -34,7 +34,7 @@ export default function dashboard() {
                                 className=" flex items-center justify-center bg-blue-500 w-28 h-8 rounded"
                                 aria-label="Add new quote"
                         >
-                            <img src='/imagess/plusBtn2.png' alt='notworking' className='filter invert w-5 h-5  mr-2'/>
+                            <img src='/images/plusBtn2.png' alt='notworking' className='filter invert w-5 h-5  mr-2'/>
                             <span className='text-white  text-xs align-middle  text-center	' >New Quote</span>
                         </button>
                 </div>
