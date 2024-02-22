@@ -23,7 +23,7 @@ export default function dashboard() {
     }
     return (
         <>
-            <NavBar user={{}}/>
+            {/* <NavBar user={{}}/> */}
             <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50">
                 <div className='flex justify-between'>
                     <div>
