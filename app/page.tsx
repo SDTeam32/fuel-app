@@ -1,4 +1,5 @@
 import Image from "next/image";
+import FuelQuote from "../components/FuelQuote";
 
 export default function Home() {
   return (
@@ -38,5 +39,6 @@ export default function Home() {
         </div>
       </div>
     </a>
+
   );
 }
