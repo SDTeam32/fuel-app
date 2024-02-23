@@ -11,7 +11,6 @@ export default function Modal({ show, children, onClose }:ModalProps ) {
     }
     
     
-    // style={{ margin: "8rem 13rem", width: "20rem"}}
     return (
         <div className=" fixed inset-0 m-12 p-10" id="my-modal" onClick={onClose} style={{padding: "10rem 8rem", backgroundColor: "rgba(0,0,0,0.5)"}}> 
           <div className=" bg-gray-100 relative top-1/4 mx-auto p-5 border w-11/12 md:max-w-md shadow-lg rounded-md "  onClick={e => e.stopPropagation()} >
