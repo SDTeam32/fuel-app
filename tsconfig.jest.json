@@ -1,0 +1,9 @@
+// tsconfig.jest.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "jsx": "react-jsx"
+    }
+  }
+  
