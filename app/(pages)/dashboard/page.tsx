@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import QuotesTable from '@/components/QuotesTable';
+import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react';
@@ -14,7 +14,7 @@ interface Quote {
     totalPrice:string
   }
 
-export default function dashboard() {
+export default function Dashboard() {
     const [showQuote, setShowQuote] = useState(false)
     const quotes: Quote[] = [{id:1, dateCreated:"02/23/2001", noGallons:"64", rate:"2.42", totalPrice:"154.88"}]
     const handleNewQuote = () => {
