@@ -40,6 +40,7 @@ import {
         </TableHead>
         <TableBody>
           {quotes.map((quote) => (
+            <>
             <TableRow key={quote.id} onClick={() => handleDetail()}>
               <TableCell>{quote.dateCreated}</TableCell>
               <TableCell>
@@ -52,11 +53,13 @@ import {
                 <Text>{quote.totalPrice}</Text>
               </TableCell>
             </TableRow>
+            <Modal show={showDetail} onClose={() => setShowDetail(false)}>
+              <QuotesDetail quote={quote}/>
+            </Modal>
+          </>
           ))}
         </TableBody>
-        <Modal show={showDetail} onClose={() => setShowDetail(false)}>
-          <QuotesDetail/>
-        </Modal>
+        
       </Table>
     )
   }
