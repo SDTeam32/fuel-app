@@ -64,7 +64,13 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddr">
                 Delivery Date
                 </label>
-                <input {...register("deliveryDate",{required: "Please Fill Date"})}  
+                <input
+                    {...register("deliveryDate", {
+                        required: "Please Fill Date",
+                        validate: {
+                          isFutureDate: (value:any) => new Date(value) > new Date() || "Date must be in the future"
+                        }
+                      })}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
                     id="deliveryAddr" type="date" />
                 {errors.deliveryDate && <p className="text-red-500 text-xs italic">{errors.deliveryDate.message}</p>}
