@@ -41,7 +41,7 @@ import {
         <TableBody>
           {quotes.map((quote) => (
             <>
-            <TableRow key={quote.id} onClick={() => handleDetail()}>
+            <TableRow key={quote.id} onClick={() => handleDetail()} className='hover:bg-gray-100 cursor-pointer'>
               <TableCell>{quote.dateCreated}</TableCell>
               <TableCell>
                 <Text>{quote.gallonsReq}</Text>
