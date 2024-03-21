@@ -24,7 +24,9 @@ import {
   
   export default function QuotesTable({ quotes }: { quotes: QuoteInput[] }) {
     const [showDetail, setShowDetail] = useState(false)
-    const handleDetail = () => {
+    const [currentQuote, setCurrentQuote] = useState<QuoteInput | undefined>()
+    const handleDetail = (quote: QuoteInput) => {
+      setCurrentQuote(quote)
       setShowDetail(!showDetail)
     }
   
@@ -41,7 +43,7 @@ import {
         <TableBody>
           {quotes.map((quote) => (
             <>
-            <TableRow key={quote.id} onClick={() => handleDetail()} className='hover:bg-gray-100 cursor-pointer'>
+            <TableRow key={quote.id} onClick={() => handleDetail(quote)} className='hover:bg-gray-100 cursor-pointer'>
               <TableCell>{quote.dateCreated}</TableCell>
               <TableCell>
                 <Text>{quote.gallonsReq}</Text>
@@ -53,13 +55,15 @@ import {
                 <Text>{quote.totalPrice}</Text>
               </TableCell>
             </TableRow>
-            <Modal show={showDetail} onClose={() => setShowDetail(false)}>
-              <QuotesDetail quote={quote}/>
-            </Modal>
+            
           </>
           ))}
         </TableBody>
-        
+        <Modal show={showDetail} onClose={() => setShowDetail(false)}>
+        {
+  currentQuote && <QuotesDetail quote={currentQuote} />
+}
+        </Modal>
       </Table>
     )
   }
