@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation'
@@ -14,9 +14,16 @@ export default function SignUp() {
   const { register, handleSubmit, watch, formState: { errors }, } = useForm<LoginInput>();
   const user = useUser(); // Destructure setUserID from the useUser hook
   const router = useRouter()
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   const onSubmit: SubmitHandler<LoginInput> = (data) => {
-    
-  };
+    if(data.username == user.userID && data.password == user.userCode) {
+        router.push('/profile')
+    }
+    else {
+        setErrorMessage('Username or password is incorrect. Please try again.');
+    }
+};
 
   return (
     <form
@@ -41,7 +48,7 @@ export default function SignUp() {
       <div className="mb-4">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="username"
+          htmlFor="password"
         >
           Password
         </label>
@@ -53,7 +60,9 @@ export default function SignUp() {
           placeholder="Password"
         />
       </div>
-      
+      {errorMessage && (
+        <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>
+      )}
       <div className="flex justify-center">
         <button
           type="submit"

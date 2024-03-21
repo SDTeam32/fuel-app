@@ -39,7 +39,7 @@ export default function Home() {
       </div>
 
       {/* Content */}
-      <div className="relative z-9 flex items-center justify-center w-full h-full">
+      <div className="relative z-1 flex items-center justify-center w-full h-full">
         <div className="bg-gray-200 rounded-md p-10 flex flex-col items-center justify-center">
           <div className="text-center mb-4">Get your Fuel Signup Today</div>
           <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleNewSignup}>

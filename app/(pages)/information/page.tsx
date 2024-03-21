@@ -9,7 +9,7 @@ export default function profile() {
     console.log("Current userID:", user.userID);
   return (
     <a
-    className="relative block group"
+    className="relative block group z-2"
     style={{
       display: "block",
       width: "100vw",

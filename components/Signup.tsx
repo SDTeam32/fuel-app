@@ -17,8 +17,8 @@ export default function SignUp() {
   const router = useRouter()
   const onSubmit: SubmitHandler<SignupInput> = (data) => {
     user.setUserID(data.username); // Save the username as the userID
-    user.setUserID(data.password);
-    router.push('/profile')
+    user.setUserCode(data.password);
+    router.push('/information')
   };
 
   return (
