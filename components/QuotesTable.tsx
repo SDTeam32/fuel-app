@@ -1,6 +1,7 @@
 import Modal from './Modal';
 import QuotesDetail from './QuotesDetail';
 import React, { useState } from 'react';
+import { QuoteInput } from '@/types';
 
 import {
     Table,
@@ -12,16 +13,16 @@ import {
     Text
   } from '@tremor/react';
   
-  interface Quote {
-    id: number;
-    dateCreated: string;
-    noGallons: string;
-    rate: string; //maybe change to number
-    totalPrice:string
-  }
+  // interface Quote {
+  //   id: number;
+  //   dateCreated: string;
+  //   noGallons: string;
+  //   rate: string; //maybe change to number
+  //   totalPrice:string
+  // }
 
   
-  export default function QuotesTable({ quotes }: { quotes: Quote[] }) {
+  export default function QuotesTable({ quotes }: { quotes: QuoteInput[] }) {
     const [showDetail, setShowDetail] = useState(false)
     const handleDetail = () => {
       setShowDetail(!showDetail)
@@ -39,13 +40,13 @@ import {
         </TableHead>
         <TableBody>
           {quotes.map((quote) => (
-            <TableRow key={quote.id} onClick={() => handleDetail()} className='bg-black'>
+            <TableRow key={quote.id} onClick={() => handleDetail()}>
               <TableCell>{quote.dateCreated}</TableCell>
               <TableCell>
-                <Text>{quote.noGallons}</Text>
+                <Text>{quote.gallonsReq}</Text>
               </TableCell>
               <TableCell>
-                <Text>{quote.rate}</Text>
+                <Text>{quote.sugPrice}</Text>
               </TableCell>
               <TableCell>
                 <Text>{quote.totalPrice}</Text>
