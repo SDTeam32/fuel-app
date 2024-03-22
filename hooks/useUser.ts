@@ -5,6 +5,8 @@ interface User {
     setUserID: (id: string | undefined) => void;
     userCode?: string;
     setUserCode: (code: string | undefined) => void;
+    userName?: string;
+    setUserName: (name: string | undefined) => void;
     userAddress1?: string;
     setUserAddress1: (addr1: string | undefined) => void;
     userAddress2?: string;
@@ -22,6 +24,8 @@ export const useUser = create<User>((set:any) => ({
         setUserID: (id: string | undefined) => set({ userID: id }),
         userCode:undefined,
         setUserCode: (code: string | undefined) => set({ userCode: code }),
+        userName:undefined,
+        setUserName: (name: string | undefined) => set({ userName: name }),
         userAddress1:undefined,
         setUserAddress1: (addr1: string | undefined) => set({ userAddress1: addr1}),
         userAddress2:undefined,
