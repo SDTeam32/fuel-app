@@ -5,12 +5,12 @@ import { useUser } from "@/hooks/useUser"
 
 export default function dashboard() {
     const user = useUser()
-    user.setUserID("Cruz")
+  
 
     return (
         <>
         <Navbar user={user}/>
-        <div className="max-w-sm bg-peach-200 rounded-lg border border-gray-200 shadow-md w-full">
+        <div className="bg-peach-200 rounded-lg border border-gray-200 shadow-md w-full">
       <div className="flex flex-col items-center p-5">
         <div className="mb-3">
           <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
