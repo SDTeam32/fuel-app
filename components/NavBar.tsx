@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
@@ -15,6 +16,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar({ user }: { user: any }) {
+  const router = useRouter()
   const [loggedIn, setLoggedIn] = useState(false)
   const pathname = usePathname();
   
@@ -70,36 +72,11 @@ export default function Navbar({ user }: { user: any }) {
                         height={32}
                         width={32}
                         alt="no jalla bro"
+                        onClick={()=> router.push("/profile")}
                       />
                     </Menu.Button>
                   </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items 
-                      style={{backgroundColor:"white", border:"0px"}}
-                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  py-1 shadow-lg  ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'flex w-full px-4 py-2 text-sm text-gray-700'
-                                )}
-                                onClick={()=> setLoggedIn(!loggedIn)}
-                              >
-                                {loggedIn ? "Log Out" : "Log In"}
-                              </button>
-                            )}
-                          </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
+                  
                 </Menu>
               </div>
             </div>
