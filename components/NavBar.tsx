@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
+import {useRouter} from 'next/navigation'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
@@ -16,8 +17,15 @@ function classNames(...classes: string[]) {
 
 export default function Navbar({ user }: { user: any }) {
   const [loggedIn, setLoggedIn] = useState(false)
-  const pathname = usePathname();
-  
+  const router = useRouter()
+  function signOut():void {
+    setLoggedIn(false)
+    return
+  }
+  function signIn():void {
+    setLoggedIn(true)
+    return
+  }
   return (
     <nav className=" h-20 drop-shadow-2xl ">
         <>
@@ -48,7 +56,7 @@ export default function Navbar({ user }: { user: any }) {
                   </svg>
                 </div>
                 <div className=" h-16 w-96 inline-flex items-end ">
-                  {navigation.map((item) => (
+                  { navigation.map((item) => (
                     <a
                       key={item.name}
                       href={item.href}
@@ -85,19 +93,50 @@ export default function Navbar({ user }: { user: any }) {
                     <Menu.Items 
                       style={{backgroundColor:"white", border:"0px"}}
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  py-1 shadow-lg  ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'flex w-full px-4 py-2 text-sm text-gray-700'
-                                )}
-                                onClick={()=> setLoggedIn(!loggedIn)}
-                              >
-                                {loggedIn ? "Log Out" : "Log In"}
-                              </button>
-                            )}
-                          </Menu.Item>
+                     {loggedIn ? (
+                      <>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => signOut()}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => router.push('/profile')}
+                            >
+                              Profile
+                            </button>
+                          )}
+                        </Menu.Item>
+                        </>
+                      ) : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => signIn()}
+                            >
+                              Sign in
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
                     </Menu.Items>
                   </Transition>
                 </Menu>
