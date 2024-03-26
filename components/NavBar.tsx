@@ -93,32 +93,50 @@ export default function Navbar({ user }: { user: any }) {
                     <Menu.Items 
                       style={{backgroundColor:"white", border:"0px"}}
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  py-1 shadow-lg  ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'flex w-full px-4 py-2 text-sm text-gray-700'
-                                )}
-                                onClick={()=> setLoggedIn(!loggedIn)}
-                              >
-                                {loggedIn ? "Log Out" : "Log In"}
-                              </button>
-                            )}
-                      </Menu.Item>
-                      <Menu.Item>
+                     {loggedIn ? (
+                      <>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => signOut()}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
                         {({ active }) => (
-                          <button
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'flex w-full px-4 py-2 text-sm text-gray-700'
-                            )}
-                            onClick={() => router.push('/profile')}
-                          >
-                            Profile
-                          </button>
-                        )}
-                      </Menu.Item>
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => router.push('/profile')}
+                            >
+                              Profile
+                            </button>
+                          )}
+                        </Menu.Item>
+                        </>
+                      ) : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => signIn()}
+                            >
+                              Sign in
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
                     </Menu.Items>
                   </Transition>
                 </Menu>
