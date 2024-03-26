@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Logo from "./Logo";
 import Button from "./Button";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   return (
