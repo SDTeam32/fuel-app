@@ -7,9 +7,7 @@ import { useRouter } from "next/navigation";
 export default function Profile() {
     const user = useUser()
     const router = useRouter()
-    if(!user.userID){
-        router.push('/')
-    }
+    
     return (
         <>
             <Navbar/>
