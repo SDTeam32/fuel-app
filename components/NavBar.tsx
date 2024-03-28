@@ -6,24 +6,29 @@ import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation'
+import { useUser } from '@/hooks/useUser';
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard' },
+const navigation:any[] = [
+  // { name: 'Dashboard', href: '/dashboard' },
 ];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navbar({ user }: { user: any }) {
-  const [loggedIn, setLoggedIn] = useState(false)
+export default function Navbar() {
+
+  const user = useUser()
   const router = useRouter()
+
+
   function signOut():void {
-    setLoggedIn(false)
+    user.logoutUser()
+    router.push('/')
     return
   }
   function signIn():void {
-    setLoggedIn(true)
+    router.push('/')
     return
   }
   return (
@@ -93,7 +98,7 @@ export default function Navbar({ user }: { user: any }) {
                     <Menu.Items 
                       style={{backgroundColor:"white", border:"0px"}}
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  py-1 shadow-lg  ring-opacity-5 focus:outline-none">
-                     {loggedIn ? (
+                     {user.userID ? (
                       <>
                         <Menu.Item>
                           {({ active }) => (

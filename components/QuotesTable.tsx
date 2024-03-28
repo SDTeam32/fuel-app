@@ -42,7 +42,6 @@ import {
         </TableHead>
         <TableBody>
           {quotes.map((quote) => (
-            <>
             <TableRow key={quote.id} onClick={() => handleDetail(quote)} className='hover:bg-gray-100 cursor-pointer'>
               <TableCell>{quote.dateCreated}</TableCell>
               <TableCell>
@@ -56,13 +55,10 @@ import {
               </TableCell>
             </TableRow>
             
-          </>
           ))}
         </TableBody>
         <Modal show={showDetail} onClose={() => setShowDetail(false)}>
-        {
-  currentQuote && <QuotesDetail quote={currentQuote} />
-}
+        {currentQuote && <QuotesDetail key={currentQuote.id} quote={currentQuote} />}
         </Modal>
       </Table>
     )
