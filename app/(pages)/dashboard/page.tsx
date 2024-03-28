@@ -9,13 +9,7 @@ import { QuoteInput } from '@/types';
 import { useUser } from '@/hooks/useUser';
 import { useRouter } from 'next/navigation';
 
-// interface Quote {
-//     id: number;
-//     dateCreated: string;
-//     noGallons: string;
-//     rate: string; //maybe change to number
-//     totalPrice:string
-// }
+
 const date = new Date().toLocaleDateString('en-US', {
     month: '2-digit',
     day: '2-digit',
@@ -24,20 +18,14 @@ const date = new Date().toLocaleDateString('en-US', {
 
 export default function Dashboard() {
     const [showQuote, setShowQuote] = useState(false)
-    // const [quoteData, setQuoteData] = useState<QuoteInput | null>(null);
-    
     const [quotes, setQuotes] = useState<QuoteInput[]>([{id:0, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]);
     const [nextId, setNextId] = useState(1); 
     const user = useUser()
-    const router = useRouter()
-    if(!user.userID){
-        router.push('/')
-    }
-    
-      
+    // const router = useRouter()
+    // if(!user.userID){
+    //     router.push('/')
+    // } 
     //const quotes: QuoteInput[] = [{id:id, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]
-    
-
     const handleQuoteSubmission = (data: QuoteInput) => {
         // Create a new quote with an ID
         const newQuoteWithId:QuoteInput = {
