@@ -36,7 +36,7 @@ export default function SignUp() {
 
     
     // Redirect to the profile page
-    router.push('/dashboard');
+    router.push('/profile');
   };
 
   return (

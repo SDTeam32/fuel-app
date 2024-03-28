@@ -17,6 +17,8 @@ interface User {
     setUserState: (state: string | undefined) => void;
     userZip?: string;
     setUserZip: (zip: string | undefined) => void;
+    logoutUser: () => void;
+
 }
 
 export const useUser = create<User>((set:any) => ({
@@ -35,7 +37,16 @@ export const useUser = create<User>((set:any) => ({
         userState:undefined,
         setUserState: (state: string | undefined) => set({ userState: state}),
         userZip:undefined,
-        setUserZip: (zip: string | undefined) => set({ userZip: zip})
-        
+        setUserZip: (zip: string | undefined) => set({ userZip: zip}),
+        logoutUser: () => set({
+            userID: undefined,
+            userCode: undefined,
+            userName: undefined,
+            userAddress1: undefined,
+            userAddress2: undefined,
+            userCity: undefined,
+            userState: undefined,
+            userZip: undefined,
+          }),
     })
 )
