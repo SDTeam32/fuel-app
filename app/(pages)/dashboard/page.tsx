@@ -3,7 +3,9 @@ import { useState } from 'react';
 import QuotesTable from '@/components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
-import { Card, Title, Text, Button } from '@tremor/react';
+import { Card, Title, Text, Button } from '@tremor/react'
+import { useUser } from '../../../hooks/useUser';
+
 import NavBar from '@/components/NavBar';
 
 interface Quote {
@@ -21,6 +23,16 @@ export default function dashboard() {
         setShowQuote(!showQuote)
         console.log("clicked")
     }
+    const user = useUser();
+    console.log("Current username:", user.userID);
+    console.log("Current pass:", user.userCode);
+    console.log("Current name:", user.userName);
+    console.log("Current addres:", user.userAddress1);
+    console.log("Current address2:", user.userAddress2);
+    console.log("Current city:", user.userCity);
+    console.log("Current state:", user.userState);
+    console.log("Current zip:", user.userZip);
+
     return (
         <>
             {/* <NavBar user={{}}/> */}

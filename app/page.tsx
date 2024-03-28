@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from 'react';
 import Modal from '@/components/Modal';
 import SignUp from "../components/Signup";
+import Navbar from "@/components/NavBar";
 
 export default function Home() {
   const [showSignup, setshowSignup] = useState(false)
