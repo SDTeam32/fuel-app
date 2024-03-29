@@ -47,6 +47,4 @@ describe('<QuotesDetail />', () => {
       boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
     });
   });
-
-  // Similarly, you can add tests for other styles if necessary
 });
