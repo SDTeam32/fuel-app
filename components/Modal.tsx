@@ -20,6 +20,7 @@ export default function Modal({ show, children, onClose }:ModalProps ) {
                 <div className="flex justify-end">
                     <button
                         id="ok-btn"
+                        data-testid="close-modal-button"
                         className=" "
                         onClick={onClose}
                         >

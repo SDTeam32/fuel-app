@@ -34,6 +34,9 @@ export default function ProfileForm() {
     user.setUserZip(data.zip)
 
     router.push('/dashboard');
+    
+//     // Redirect to the profile page
+//     router.push('/profile');
   };
 
   return (

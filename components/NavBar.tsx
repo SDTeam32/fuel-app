@@ -5,21 +5,36 @@ import { usePathname } from 'next/navigation';
 import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
+import {useRouter} from 'next/navigation'
+import { useUser } from '../hooks/useUser';
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard' },
+const navigation:any[] = [
+  // { name: 'Dashboard', href: '/dashboard' },
 ];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navbar({ user }: { user: any }) {
-  const [loggedIn, setLoggedIn] = useState(false)
-  const pathname = usePathname();
-  
+export default function Navbar() {
+
+  const user = useUser()
+  // const router = useRouter()
+
+
+  function signOut():void {
+    user.logoutUser()
+    // router.push('/')
+    return
+  }
+  function signIn():void {
+    // router.push('/')
+    return
+  }
   return (
-    <nav className=" h-20 drop-shadow-2xl ">
+    <nav 
+        className=" h-20 drop-shadow-2xl"
+        data-testid="navtest">
         <>
           <div className="mx-auto  px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
@@ -47,8 +62,8 @@ export default function Navbar({ user }: { user: any }) {
                     />
                   </svg>
                 </div>
-                <div className=" h-16 w-96 inline-flex items-end ">
-                  {navigation.map((item) => (
+                {/* <div className=" h-16 w-96 inline-flex items-end ">
+                  { navigation.map((item) => (
                     <a
                       key={item.name}
                       href={item.href}
@@ -58,13 +73,14 @@ export default function Navbar({ user }: { user: any }) {
                       {item.name}
                     </a>
                   ))}
-                </div>
+                </div> */}
               </div>
               <div className="" style={{marginTop:"1.25rem"}}>
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="">
+                    <Menu.Button data-testid="imageButton">
                       <Image
+
                         className="h-8 w-8 rounded-full"
                         src='/images/blank-user.png'
                         height={32}
@@ -85,19 +101,51 @@ export default function Navbar({ user }: { user: any }) {
                     <Menu.Items 
                       style={{backgroundColor:"white", border:"0px"}}
                       className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  py-1 shadow-lg  ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'flex w-full px-4 py-2 text-sm text-gray-700'
-                                )}
-                                onClick={()=> setLoggedIn(!loggedIn)}
-                              >
-                                {loggedIn ? "Log Out" : "Log In"}
-                              </button>
-                            )}
-                          </Menu.Item>
+                     {user.userID ? (
+                      <>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => signOut()}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                        {({ active }) => (
+                            <button
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => window.location.replace('/profile')}
+                            >
+                              Profile
+                            </button>
+                          )}
+                        </Menu.Item>
+                        </>
+                      ) : (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              data-testid="signInButton"
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'flex w-full px-4 py-2 text-sm text-gray-700'
+                              )}
+                              onClick={() => signIn()}
+                            >
+                              Sign in
+                            </button>
+                          )}
+                        </Menu.Item>
+                      )}
                     </Menu.Items>
                   </Transition>
                 </Menu>

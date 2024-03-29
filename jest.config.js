@@ -3,7 +3,7 @@ module.exports = {
     testEnvironment: 'jsdom',
     moduleNameMapper: {
       // Handle module aliases (if you have them configured in your tsconfig.json)
-      '^@components/(.*)$': '<rootDir>/components/$1',
+      "^@/components/(.*)$": "<rootDir>/components/$1",
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     transform: {

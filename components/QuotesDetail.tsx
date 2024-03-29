@@ -1,4 +1,6 @@
-export default function QuotesDetail() {
+import { QuoteInput } from "@/types";
+
+export default function QuotesDetail({quote}: {quote:QuoteInput}) {
   const quoteDetails = {
     dateCreated: '02/23/2001',
     numberOfGallons: 64,
@@ -34,17 +36,17 @@ export default function QuotesDetail() {
       <div style={cardStyle}>
         <div style={headerStyle}>Personal Information</div>
         <p><strong>Name:</strong> {quoteDetails.name}</p>
-        <p><strong>Address:</strong> {quoteDetails.address}</p>
+        <p><strong>Address:</strong> {quote.deliveryAddr}</p>
         <p><strong>City:</strong> {quoteDetails.city}</p>
         <p><strong>State:</strong> {quoteDetails.state}</p>
       </div>
 
       <div style={cardStyle}>
         <div style={headerStyle}>Quote Information</div>
-        <p><strong>Date Created:</strong> {quoteDetails.dateCreated}</p>
-        <p><strong># of Gallons:</strong> {quoteDetails.numberOfGallons}</p>
-        <p><strong>Rate:</strong> ${quoteDetails.rate.toFixed(2)}</p>
-        <p><strong>Total Price:</strong> ${quoteDetails.totalPrice.toFixed(2)}</p>
+        <p><strong>Date Created:</strong> {quote.dateCreated}</p>
+        <p><strong># of Gallons:</strong> {quote.gallonsReq}</p>
+        <p><strong>Rate:</strong> {quote.sugPrice}</p>
+        <p><strong>Total Price:</strong> {quote.totalPrice}</p>
       </div>
     </div>
   );
