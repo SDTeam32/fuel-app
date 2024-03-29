@@ -10,7 +10,7 @@ interface LoginInput {
   password: string;
 }
 
-export default function SignUp() {
+export default function LogIn() {
   const { register, handleSubmit, watch, formState: { errors }, } = useForm<LoginInput>();
   const user = useUser(); // Destructure setUserID from the useUser hook
   const router = useRouter()

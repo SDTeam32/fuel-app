@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
@@ -10,10 +10,10 @@ interface ProfileInfo {
   address2: string;
   city: string;
   state: string;
-  zip: string; // Change type to string as zip codes can contain non-numeric characters
+  zip: string;
 }
 
-export default function SignUp() {
+export default function ProfileForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<ProfileInfo>();
   const user = useUser();
   const router = useRouter();
@@ -26,7 +26,6 @@ export default function SignUp() {
   ];
 
   const onSubmit: SubmitHandler<ProfileInfo> = (data) => {
-    // Save profile information using the useUser hook
     user.setUserName(data.name);
     user.setUserAddress1(data.address1)
     user.setUserAddress2(data.address2)
@@ -34,9 +33,10 @@ export default function SignUp() {
     user.setUserState(data.state)
     user.setUserZip(data.zip)
 
+    router.push('/dashboard');
     
-    // Redirect to the profile page
-    router.push('/profile');
+//     // Redirect to the profile page
+//     router.push('/profile');
   };
 
   return (
