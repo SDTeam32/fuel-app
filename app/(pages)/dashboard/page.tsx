@@ -5,10 +5,8 @@ import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react'
 import { useUser } from '../../../hooks/useUser';
-
 import NavBar from '@/components/NavBar';
 import { QuoteInput } from '@/types';
-import { useUser } from '../../../hooks/useUser';
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -46,7 +44,6 @@ export default function Dashboard() {
         setShowQuote(!showQuote)
         console.log("clicked")
     }
-    const user = useUser();
     console.log("Current username:", user.userID);
     console.log("Current pass:", user.userCode);
     console.log("Current name:", user.userName);
