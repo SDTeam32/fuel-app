@@ -6,7 +6,7 @@ import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation'
-import { useUser } from '@/hooks/useUser';
+import { useUser } from '../hooks/useUser';
 
 const navigation:any[] = [
   // { name: 'Dashboard', href: '/dashboard' },
@@ -19,20 +19,22 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
 
   const user = useUser()
-  const router = useRouter()
+  // const router = useRouter()
 
 
   function signOut():void {
     user.logoutUser()
-    router.push('/')
+    // router.push('/')
     return
   }
   function signIn():void {
-    router.push('/')
+    // router.push('/')
     return
   }
   return (
-    <nav className=" h-20 drop-shadow-2xl ">
+    <nav 
+        className=" h-20 drop-shadow-2xl"
+        data-testid="navtest">
         <>
           <div className="mx-auto  px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
@@ -60,7 +62,7 @@ export default function Navbar() {
                     />
                   </svg>
                 </div>
-                <div className=" h-16 w-96 inline-flex items-end ">
+                {/* <div className=" h-16 w-96 inline-flex items-end ">
                   { navigation.map((item) => (
                     <a
                       key={item.name}
@@ -71,13 +73,14 @@ export default function Navbar() {
                       {item.name}
                     </a>
                   ))}
-                </div>
+                </div> */}
               </div>
               <div className="" style={{marginTop:"1.25rem"}}>
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="">
+                    <Menu.Button data-testid="imageButton">
                       <Image
+
                         className="h-8 w-8 rounded-full"
                         src='/images/blank-user.png'
                         height={32}
@@ -120,7 +123,7 @@ export default function Navbar() {
                                 active ? 'bg-gray-100' : '',
                                 'flex w-full px-4 py-2 text-sm text-gray-700'
                               )}
-                              onClick={() => router.push('/profile')}
+                              onClick={() => window.location.replace('/profile')}
                             >
                               Profile
                             </button>
@@ -131,6 +134,7 @@ export default function Navbar() {
                         <Menu.Item>
                           {({ active }) => (
                             <button
+                              data-testid="signInButton"
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
                                 'flex w-full px-4 py-2 text-sm text-gray-700'

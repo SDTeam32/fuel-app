@@ -6,8 +6,7 @@ import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react';
 import NavBar from '@/components/NavBar';
 import { QuoteInput } from '@/types';
-import { useUser } from '@/hooks/useUser';
-import { useRouter } from 'next/navigation';
+import { useUser } from '../../../hooks/useUser';
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -21,7 +20,6 @@ export default function Dashboard() {
     const [quotes, setQuotes] = useState<QuoteInput[]>([{id:0, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]);
     const [nextId, setNextId] = useState(1); 
     const user = useUser()
-    // const router = useRouter()
     // if(!user.userID){
     //     router.push('/')
     // } 
