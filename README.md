@@ -16,6 +16,10 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Run unit tests with 'npm run test:coverage'
+
+![tests - Copy](https://github.com/SDTeam32/fuel-app/assets/110220969/345d2437-aeaa-4be2-b133-44a6d375ef15)
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
