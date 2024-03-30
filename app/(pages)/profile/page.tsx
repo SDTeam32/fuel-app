@@ -1,7 +1,7 @@
 "use client"
 import Navbar from "@/components/NavBar";
 import { userAgent } from "next/server";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "../../../hooks/useUser";
 import { useRouter } from "next/navigation";
 
 export default function Profile() {
