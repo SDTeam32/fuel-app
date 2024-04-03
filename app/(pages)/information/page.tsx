@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useUser } from '../../../hooks/useUser';
 import ProfileForm from "@/components/ProfileForm";
 
-export default function profile() {
+export default function Information() {
   const user = useUser();
   console.log("Current userID:", user.userID);
   

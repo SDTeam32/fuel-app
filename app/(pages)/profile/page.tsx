@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function Profile() {
     const user = useUser()
-    //const router = useRouter()
+    const router = useRouter()
     
     return (
         <>
@@ -21,7 +21,7 @@ export default function Profile() {
                   <p className="text-gray-600"><span className="font-semibold">ZIP:</span> {user.userZip}</p>
                 </div>
             </div>
-            {/* <button  className="bg-blue-500 p-4" onClick={()=>router.push('/dashboard')} >dashboard</button> */}
+            <button  className="bg-blue-500 p-4" onClick={()=>router.push('/dashboard')} >dashboard</button>
 
 
         </>
