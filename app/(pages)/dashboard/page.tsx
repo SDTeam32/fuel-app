@@ -46,14 +46,14 @@ export default function Dashboard() {
         setShowQuote(!showQuote)
         console.log("clicked")
     }
-    const newNotes = async () => {
-        const { data: notes } = await supabase.from("notes").select();
-        console.log(notes)
-    }
+    // const newNotes = async () => {
+    //     const { data: notes } = await supabase.from("notes").select();
+    //     console.log(notes)
+    // }
 
-    useEffect(() => {
-        newNotes()
-    },[handleNewQuote])
+    // useEffect(() => {
+    //     newNotes()
+    // },[handleNewQuote])
 
     
     //const quotes: QuoteInput[] = [{id:id, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]
