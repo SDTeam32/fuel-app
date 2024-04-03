@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
@@ -7,6 +7,7 @@ import { Card, Title, Text, Button } from '@tremor/react';
 import NavBar from '@/components/NavBar';
 import { QuoteInput } from '@/types';
 import { useUser } from '../../../hooks/useUser';
+import { supabase } from '@/utils/supabase/server';
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -20,10 +21,11 @@ export default function Dashboard() {
     const [quotes, setQuotes] = useState<QuoteInput[]>([{id:0, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]);
     const [nextId, setNextId] = useState(1); 
     const user = useUser()
+    
+    
     // if(!user.userID){
     //     router.push('/')
     // } 
-    //const quotes: QuoteInput[] = [{id:id, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]
     const handleQuoteSubmission = (data: QuoteInput) => {
         // Create a new quote with an ID
         const newQuoteWithId:QuoteInput = {
@@ -44,6 +46,18 @@ export default function Dashboard() {
         setShowQuote(!showQuote)
         console.log("clicked")
     }
+    const newNotes = async () => {
+        const { data: notes } = await supabase.from("notes").select();
+        console.log(notes)
+    }
+
+    useEffect(() => {
+        newNotes()
+    },[handleNewQuote])
+
+    
+    //const quotes: QuoteInput[] = [{id:id, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]
+    
     return (
         <>
             <NavBar />
