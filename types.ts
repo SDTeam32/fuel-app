@@ -8,3 +8,9 @@ export interface QuoteInput {
     totalPrice: number
     // any other properties needed for a quote
 }
+
+export interface State {
+    id: number
+    state_name: string
+    state_abbreviation: string
+}
