@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation'
+import { supabase } from '@/utils/supabase/server';
+
 
 interface SignupInput {
   username: string;
@@ -13,11 +15,27 @@ export default function SignUp() {
   const { register, handleSubmit, watch, formState: { errors }, } = useForm<SignupInput>();
   const user = useUser();
   const router = useRouter();
+  const bcrypt = require('bcryptjs');
 
-  const onSubmit: SubmitHandler<SignupInput> = (data) => {
-    user.setUserID(data.username);
-    user.setUserCode(data.password);
-    router.push('/information');
+  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
+    try {
+        const saltRounds = 10;
+        // Corrected to include saltRounds in the hashSync method
+        const hash = bcrypt.hashSync(data.password, saltRounds);
+        const { error } = await supabase.from("credentials").insert([{ username: data.username, password: hash }]);
+
+        if (error) throw error;
+
+        console.log("Username and Password Inserted Successfully");
+
+        // Assuming you're handling session or user state elsewhere
+        // user.setUserName(data.username);
+        // user.setUserCode(data.password);
+
+        router.push('/information');
+    } catch (error) {
+      console.error("Error Signing Up", error);
+    }
   };
 
   return (
@@ -34,7 +52,7 @@ export default function SignUp() {
           Username<span className="text-red-500">*</span>
         </label>
         <input
-          {...register("username", { required: true })}
+          {...register("username", { required: true, maxLength: 20, minLength: 3 })}
           className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
             errors.username ? "border-red-500" : ""
           }`}
@@ -43,10 +61,15 @@ export default function SignUp() {
           placeholder="Username"
         />
         {errors.username && (
-          <p className="text-red-500 text-xs italic">
-            Username is required.
-          </p>
-        )}
+        <p className="text-red-500 text-xs italic">
+          {errors.username.type === "required"
+            ? "Required."
+            : errors.username.type === "maxLength"
+            ? "At most 20 characters."
+            : "At least 3 characters."
+          }
+        </p>
+      )}
       </div>
       <div className="mb-4">
         <label
@@ -56,7 +79,7 @@ export default function SignUp() {
           Password<span className="text-red-500">*</span>
         </label>
         <input
-          {...register("password", { required: true })}
+          {...register("password", { required: true, minLength: 8,  maxLength: 50 })}
           className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
             errors.password ? "border-red-500" : ""
           }`}
@@ -65,10 +88,15 @@ export default function SignUp() {
           placeholder="Password"
         />
         {errors.password && (
-          <p className="text-red-500 text-xs italic">
-            Password is required.
-          </p>
-        )}
+        <p className="text-red-500 text-xs italic">
+          {errors.password.type === "required"
+            ? "Required."
+            : errors.password.type === "maxLength"
+            ? "At most 50 characters."
+            : "At least 8 characters."
+          }
+        </p>
+      )}
       </div>
       <div className="mb-4">
         <label
@@ -79,7 +107,7 @@ export default function SignUp() {
         </label>
         <input
           {...register("password2", {
-            required: true,
+            required: true, minLength: 8, maxLength: 50,
             validate: (val: string) => {
               if (watch("password") !== val) {
                 return "Your passwords do not match";
@@ -94,10 +122,15 @@ export default function SignUp() {
           placeholder="Confirm Password"
         />
         {errors.password2 && (
-          <p className="text-red-500 text-xs italic">
-            {errors.password2.message}
-          </p>
-        )}
+        <p className="text-red-500 text-xs italic">
+          {errors.password2.type === "required"
+            ? "Required."
+            : errors.password2.type === "maxLength"
+            ? "At most 50 characters."
+            : "At least 8 characters."
+          }
+        </p>
+      )}
       </div>
       
       <div className="flex justify-center">

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation'
+import { supabase } from '@/utils/supabase/server';
 
 
 interface LoginInput {
@@ -15,13 +16,28 @@ export default function SignUp() {
   const user = useUser(); // Destructure setUserID from the useUser hook
   const router = useRouter()
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const bcrypt = require('bcryptjs');
 
-  const onSubmit: SubmitHandler<LoginInput> = (data) => {
-    if(data.username == user.userID && data.password == user.userCode) {
-        router.push('/profile')
-    }
-    else {
-        setErrorMessage('Username or password is incorrect. Please try again.');
+  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
+    try {
+      const { data: userData, error: userError } = await supabase
+        .from('credentials')
+        .select('password')
+        .eq('username', data.username)
+        .single();
+
+      if (userError || !user) throw new Error("Username does not exist")
+
+      const passwordIsValid = await bcrypt.compareSync(data.password, userData.password)
+
+      if(passwordIsValid) {
+        console.log("User logged in suzzessfully");
+        user.setUserName(data.username);
+        router.push('/profile');
+      }
+    } catch (error) {
+      setErrorMessage("Failed to log in. Please check your username and password.");
+      console.error("Login error", error);
     }
 };
 
