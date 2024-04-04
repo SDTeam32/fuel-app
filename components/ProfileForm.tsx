@@ -1,8 +1,11 @@
 "use client";
 import React from "react";
+import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
+import { supabase } from "@/utils/supabase/server";
+import { State } from "@/types";
 
 interface ProfileInfo {
   name: string;
@@ -15,15 +18,27 @@ interface ProfileInfo {
 
 export default function SignUp() {
   const { register, handleSubmit, formState: { errors } } = useForm<ProfileInfo>();
+  const [states, setStates] = useState<State[]>([]);
+
   const user = useUser();
   const router = useRouter();
-  const stateCodes = [
-    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-    'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-    'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-    'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-    'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-  ];
+
+  useEffect(() => {
+    // Define an asynchronous function inside the effect
+    async function fetchStates() {
+      const { data , error } = await supabase.from('states').select();
+      
+      if (error) {
+        console.error('Error fetching states:', error);
+      } else {
+        setStates(data);
+      }
+    }
+
+    
+    fetchStates();
+  }, []);
+
 
   const onSubmit: SubmitHandler<ProfileInfo> = (data) => {
     // Save profile information using the useUser hook
@@ -155,9 +170,9 @@ export default function SignUp() {
             id="state"
           >
             <option value="">Select State</option>
-            {stateCodes.map((stateCode) => (
-              <option key={stateCode} value={stateCode}>
-                {stateCode}
+            {states.map((state) => (
+              <option key={state.id} value={state.state_abbreviation}>
+                {state.state_abbreviation}
               </option>
             ))}
           </select>
