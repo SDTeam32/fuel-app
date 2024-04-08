@@ -2,6 +2,7 @@
 import {useForm, SubmitHandler} from "react-hook-form"
 import { useEffect } from "react"
 import { QuoteInput } from "@/types"
+import { useRequireAuth } from '@/utils/auth';
 
 // interface QuoteInput {
 //     gallonsReq: number
@@ -15,6 +16,7 @@ interface FuelQuoteProps {
 }
 
 export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
+    useRequireAuth();
     const {register, handleSubmit, watch, setValue, formState:{errors}} = useForm<QuoteInput>()
     const fakeAddress: string = "123 Main St, 77032 Houston TX"
     const suggestedPrice: number = 2.42

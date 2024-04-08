@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
-
+import { useRequireAuth } from '@/utils/auth';
+import { getSession } from "@/lib";
 interface ProfileInfo {
   name: string;
   address1: string;
@@ -24,7 +25,18 @@ export default function SignUp() {
     'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
     'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
   ];
+  useEffect(() => {
+    async function checkAuth() {
+      const session = await getSession();
+      if (!session) {
+        // If the user is not authenticated, redirect to the homepage
+        router.push('/');
+      }
+    }
 
+    checkAuth();
+  }, [router]);
+  
   const onSubmit: SubmitHandler<ProfileInfo> = (data) => {
     // Save profile information using the useUser hook
     user.setUserName(data.name);

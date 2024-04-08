@@ -4,10 +4,12 @@ import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react';
-import NavBar from '@/components/NavBar';
 import { QuoteInput } from '@/types';
 import { useUser } from '../../../hooks/useUser';
 import { supabase } from '@/utils/supabase/server';
+import Navigation from '@/components/Navigation';
+import { useRequireAuth } from '@/utils/auth';
+
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -17,6 +19,8 @@ const date = new Date().toLocaleDateString('en-US', {
   });
 
 export default function Dashboard() {
+    useRequireAuth();
+
     const [showQuote, setShowQuote] = useState(false)
     const [quotes, setQuotes] = useState<QuoteInput[]>([{id:0, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]);
     const [nextId, setNextId] = useState(1); 
@@ -60,8 +64,8 @@ export default function Dashboard() {
     
     return (
         <>
-            <NavBar />
-            <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50">
+        
+            <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50 pt-10">
                 <div className='flex justify-between'>
                     <div>
                             <Title>Quotes</Title>

@@ -2,6 +2,7 @@ import Modal from './Modal';
 import QuotesDetail from './QuotesDetail';
 import React, { useState } from 'react';
 import { QuoteInput } from '@/types';
+import { useRequireAuth } from '@/utils/auth';
 
 import {
     Table,
@@ -23,6 +24,7 @@ import {
 
   
   export default function QuotesTable({ quotes }: { quotes: QuoteInput[] }) {
+    useRequireAuth();
     const [showDetail, setShowDetail] = useState(false)
     const [currentQuote, setCurrentQuote] = useState<QuoteInput | undefined>()
     const handleDetail = (quote: QuoteInput) => {
