@@ -1,7 +1,7 @@
 "use client"
 import {useForm, SubmitHandler} from "react-hook-form"
 import { useEffect } from "react"
-import { QuoteInput } from "@/types"
+import { Quote, QuoteInput } from "@/types"
 
 // interface QuoteInput {
 //     gallonsReq: number
@@ -11,18 +11,18 @@ import { QuoteInput } from "@/types"
 //     totalPrice: number
 // }
 interface FuelQuoteProps {
-    sendQuote: (data: QuoteInput) => void;
+    sendQuote: (data: Quote) => void;
 }
 
 export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
-    const {register, handleSubmit, watch, setValue, formState:{errors}} = useForm<QuoteInput>()
+    const {register, handleSubmit, watch, setValue, formState:{errors}} = useForm<Quote>()
     const fakeAddress: string = "123 Main St, 77032 Houston TX"
     const suggestedPrice: number = 2.42
-    const gallonsRequested = watch("gallonsReq",0)
+    const gallonsRequested = watch("gallons_req",0)
     
     useEffect(() => {
         // Set the default value for deliveryAddr on component mount
-        setValue('deliveryAddr', fakeAddress);
+        setValue('delivery_addr', fakeAddress);
       }, [setValue]);
 
     const calculateTotalPrice = (gallons: number) => {
@@ -31,10 +31,10 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
       };
     const totalPrice:number = calculateTotalPrice(gallonsRequested)
 
-    const onSubmit: SubmitHandler<QuoteInput> = (data:QuoteInput) => {
-        data.gallonsReq = Number(data.gallonsReq)
-        data.sugPrice = suggestedPrice
-        data.totalPrice = totalPrice
+    const onSubmit: SubmitHandler<Quote> = (data:Quote) => {
+        data.gallons_req = Number(data.gallons_req)
+        data.sug_price = suggestedPrice
+        data.total_price = totalPrice
 
         sendQuote(data)
         //send to db logic
@@ -48,10 +48,10 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gallonsReq">
                 Gallons Requested
                 </label>
-                <input {...register("gallonsReq",{required: "Please Fill Gallons Requested"})} 
+                <input {...register("gallons_req",{required: "Please Fill Gallons Requested"})} 
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="gallonsReq" type="number" placeholder="Gallons requested"/>
-                {errors.gallonsReq && <p className="text-red-500 text-xs italic">{errors.gallonsReq.message}</p>}
+                {errors.gallons_req && <p className="text-red-500 text-xs italic">{errors.gallons_req?.message}</p>}
             </div>
             <div className="mb-6">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddr">
@@ -65,7 +65,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                 Delivery Date
                 </label>
                 <input
-                    {...register("deliveryDate", {
+                    {...register("delivery_date", {
                         required: "Please Fill Date",
                         validate: {
                           isFutureDate: (value:any) => new Date(value) > new Date() || "Date must be in the future"
@@ -73,7 +73,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                       })}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
                     id="deliveryAddr" type="date" />
-                {errors.deliveryDate && <p className="text-red-500 text-xs italic">{errors.deliveryDate.message}</p>}
+                {errors.delivery_date && <p className="text-red-500 text-xs italic">{errors.delivery_date.message}</p>}
             </div> <br/>
             <label className="block text-gray-700 text-sm font-bold mb-2"> Suggested Price  </label>
             <span className="text-black">{suggestedPrice}</span><br/>

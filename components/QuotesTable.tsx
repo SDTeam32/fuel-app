@@ -1,7 +1,7 @@
 import Modal from './Modal';
 import QuotesDetail from './QuotesDetail';
 import React, { useState } from 'react';
-import { QuoteInput } from '@/types';
+import { QuoteInput, Quote } from '@/types';
 
 import {
     Table,
@@ -22,10 +22,10 @@ import {
   // }
 
   
-  export default function QuotesTable({ quotes }: { quotes: QuoteInput[] }) {
+  export default function QuotesTable({ quotes }: { quotes: Quote[] }) {
     const [showDetail, setShowDetail] = useState(false)
-    const [currentQuote, setCurrentQuote] = useState<QuoteInput | undefined>()
-    const handleDetail = (quote: QuoteInput) => {
+    const [currentQuote, setCurrentQuote] = useState<Quote | undefined>()
+    const handleDetail = (quote: Quote) => {
       setCurrentQuote(quote)
       setShowDetail(!showDetail)
     }
@@ -43,15 +43,15 @@ import {
         <TableBody>
           {quotes.map((quote) => (
             <TableRow key={quote.id} onClick={() => handleDetail(quote)} className='hover:bg-gray-100 cursor-pointer'>
-              <TableCell>{quote.dateCreated}</TableCell>
+              <TableCell>{quote.date_created}</TableCell>
               <TableCell>
-                <Text>{quote.gallonsReq}</Text>
+                <Text>{quote.gallons_req}</Text>
               </TableCell>
               <TableCell>
-                <Text>{quote.sugPrice}</Text>
+                <Text>{quote.sug_price}</Text>
               </TableCell>
               <TableCell>
-                <Text>{quote.totalPrice}</Text>
+                <Text>{quote.total_price}</Text>
               </TableCell>
             </TableRow>
             

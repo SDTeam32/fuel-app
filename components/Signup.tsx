@@ -17,15 +17,17 @@ export default function SignUp() {
   const router = useRouter();
   const bcrypt = require('bcryptjs');
 
-  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
+  const onSubmit: SubmitHandler<SignupInput> = async (info) => {
     try {
         const saltRounds = 10;
         // Corrected to include saltRounds in the hashSync method
-        const hash = bcrypt.hashSync(data.password, saltRounds);
-        const { error } = await supabase.from("credentials").insert([{ username: data.username, password: hash }]);
-
-        if (error) throw error;
-
+        const hash = bcrypt.hashSync(info.password, saltRounds);
+        const { data, error } = await supabase.from("credentials").insert([{ username: info.username, password: hash }]).select();
+        
+        if (error) {
+          throw error
+        };
+        user.setUserNumber(data[0].user_id)
         console.log("Username and Password Inserted Successfully");
 
         // Assuming you're handling session or user state elsewhere
