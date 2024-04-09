@@ -15,6 +15,7 @@ export function useRequireAuth() {
         // If user is not authenticated, redirect to the homepage
         userData.setLoggedIn(false);
         router.push('/');
+        alert("you have been logged out due to inactivity")
       }
     }
 
