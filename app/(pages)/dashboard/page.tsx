@@ -26,15 +26,12 @@ export default function Dashboard() {
     //     router.push('/')
     // } 
     const handleQuoteSubmission = async (quote: Quote) => {
-        // Create a new quote with an ID
+        
         if (!user.userNumber) {
             user.setUserNumber(1)
         }
         const userid = user.userNumber
-        // const newQuoteWithId:QuoteInput = {
-        //   ...quote,
-        //   user_id: userid// Construct an ID for the new quote
-        // };
+        
         try {
             const { data, error } = await supabase.from("quote").insert([{
                 ...quote,
