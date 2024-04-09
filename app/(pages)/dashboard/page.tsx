@@ -51,6 +51,7 @@ export default function Dashboard() {
 
             // Add the new quote to the existing quotes
             setQuotes(prevQuotes => [...prevQuotes, instertedQuote]);
+            setShowQuote(false)
 
         } catch (error) {
             console.error("Error inserting quote:", error)
