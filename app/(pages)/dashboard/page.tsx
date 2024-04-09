@@ -4,7 +4,6 @@ import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react';
-import NavBar from '@/components/NavBar';
 import { Quote, QuoteInput } from '@/types';
 import { useUser } from '../../../hooks/useUser';
 import { supabase } from '@/utils/supabase/server';
@@ -88,7 +87,7 @@ export default function Dashboard() {
     return (
         <>
         
-            <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50 pt-10">
+            <main className="px-4 md:p-10 mx-auto max-w-7xl bg-gray-50 pt-10">
                 <div className='flex justify-between'>
                     <div>
                             <Title>Quotes</Title>
