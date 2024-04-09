@@ -1,6 +1,9 @@
 import { QuoteInput } from "@/types";
+import { useRequireAuth } from '@/utils/auth';
 
 export default function QuotesDetail({quote}: {quote:QuoteInput}) {
+  useRequireAuth();
+
   const quoteDetails = {
     dateCreated: '02/23/2001',
     numberOfGallons: 64,
