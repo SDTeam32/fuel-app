@@ -39,7 +39,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
   return (
     <div 
           data-testid="backdrop"
-          className="fixed inset-0 m-12 p-10" id="my-modal" onClick={onClose} style={{backgroundColor: "rgba(0,0,0,0.5)", margin: "0"}}> 
+          className="fixed inset-0 m-12 p-10 z-10" id="my-modal" onClick={onClose} style={{backgroundColor: "rgba(0,0,0,0.5)", margin: "0"}}> 
           <div className=" bg-gray-100 relative top-1/4 mx-auto p-5 border w-11/12 md:max-w-md shadow-lg rounded-md "  onClick={e => e.stopPropagation()} >
               <div className="items-center px-4 py-3">
                 <div className="flex justify-end">
