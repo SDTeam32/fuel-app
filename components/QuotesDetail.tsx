@@ -1,7 +1,8 @@
-import { QuoteInput } from "@/types";
+
+import { QuoteInput, Quote } from "@/types";
 import { useRequireAuth } from '@/utils/auth';
 
-export default function QuotesDetail({quote}: {quote:QuoteInput}) {
+export default function QuotesDetail({quote}: {quote:Quote}) {
   useRequireAuth();
 
   const quoteDetails = {
@@ -39,17 +40,17 @@ export default function QuotesDetail({quote}: {quote:QuoteInput}) {
       <div style={cardStyle}>
         <div style={headerStyle}>Personal Information</div>
         <p><strong>Name:</strong> {quoteDetails.name}</p>
-        <p><strong>Address:</strong> {quote.deliveryAddr}</p>
+        <p><strong>Address:</strong> {quote.delivery_addr}</p>
         <p><strong>City:</strong> {quoteDetails.city}</p>
         <p><strong>State:</strong> {quoteDetails.state}</p>
       </div>
 
       <div style={cardStyle}>
         <div style={headerStyle}>Quote Information</div>
-        <p><strong>Date Created:</strong> {quote.dateCreated}</p>
-        <p><strong># of Gallons:</strong> {quote.gallonsReq}</p>
-        <p><strong>Rate:</strong> {quote.sugPrice}</p>
-        <p><strong>Total Price:</strong> {quote.totalPrice}</p>
+        <p><strong>Date Created:</strong> {quote.date_created}</p>
+        <p><strong># of Gallons:</strong> {quote.gallons_req}</p>
+        <p><strong>Rate:</strong> {quote.sug_price}</p>
+        <p><strong>Total Price:</strong> {quote.total_price}</p>
       </div>
     </div>
   );

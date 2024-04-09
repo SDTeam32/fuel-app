@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { signup } from "@/lib";
 
 
@@ -35,7 +35,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
       console.error("Error Signing Up", error);
     }
   };
-
+  
   return (
     <div 
           data-testid="backdrop"
