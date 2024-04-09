@@ -1,13 +1,11 @@
 "use client"
 import Image from "next/image";
-import { useState } from 'react';
-import { useUser } from '../../../hooks/useUser';
 import ProfileForm from "@/components/ProfileForm";
+import { useRequireAuth } from '@/utils/auth';
 
 export default function Information() {
-  const user = useUser();
-  console.log("Current userID:", user.userID);
   
+  useRequireAuth();
   return (
     <div
       className="relative block group"

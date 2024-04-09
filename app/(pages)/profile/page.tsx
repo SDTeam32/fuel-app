@@ -1,16 +1,19 @@
 "use client"
-import Navbar from "@/components/NavBar";
-import { userAgent } from "next/server";
+
 import { useUser } from "../../../hooks/useUser";
 import { useRouter } from "next/navigation";
+import { useRequireAuth } from '@/utils/auth';
+import { useEffect } from "react";
+import { getSession } from "@/lib";
 
 export default function Profile() {
-    const user = useUser()
     const router = useRouter()
+    useRequireAuth();
+
+    const user = useUser()
     
     return (
         <>
-            <Navbar/>
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h1 className="text-xl font-bold text-gray-900 mb-2">Welcome, {user.userID}</h1>
                 <h2 className="text-lg text-gray-700 mb-4">User Information</h2>

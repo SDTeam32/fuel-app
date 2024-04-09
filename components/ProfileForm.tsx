@@ -6,6 +6,7 @@ import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
 import { supabase } from "@/utils/supabase/server";
 import { State } from "@/types";
+import { getSession } from "@/lib";
 
 interface ProfileInfo {
   name: string;
@@ -34,10 +35,19 @@ export default function SignUp() {
         setStates(data);
       }
     }
-
     
+    async function checkAuth() {
+      const session = await getSession();
+      if (!session) {
+        // If the user is not authenticated, redirect to the homepage
+        router.push('/');
+      }
+    }
+    
+
+    checkAuth();
     fetchStates();
-  }, []);
+  }, [router]);
 
 
   const onSubmit: SubmitHandler<ProfileInfo> = (data) => {

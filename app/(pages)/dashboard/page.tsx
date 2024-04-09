@@ -8,6 +8,9 @@ import NavBar from '@/components/NavBar';
 import { Quote, QuoteInput } from '@/types';
 import { useUser } from '../../../hooks/useUser';
 import { supabase } from '@/utils/supabase/server';
+import Navigation from '@/components/Navigation';
+import { useRequireAuth } from '@/utils/auth';
+
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -17,6 +20,8 @@ const date = new Date().toLocaleDateString('en-US', {
   });
 
 export default function Dashboard() {
+    useRequireAuth();
+
     const [showQuote, setShowQuote] = useState(false)
     const [quotes, setQuotes] = useState<Quote[]>([{id:0,user_id:0, date_created: date, gallons_req: 64, sug_price: 2.42, total_price:232}]);
     const user = useUser()
@@ -82,8 +87,8 @@ export default function Dashboard() {
     
     return (
         <>
-            <NavBar />
-            <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50">
+        
+            <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50 pt-10">
                 <div className='flex justify-between'>
                     <div>
                             <Title>Quotes</Title>

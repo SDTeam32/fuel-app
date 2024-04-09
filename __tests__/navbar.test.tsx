@@ -3,7 +3,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Navbar from '../components/NavBar'; // Adjust the relative path as necessary
+import Navbar from '../components/Navigation'; // Adjust the relative path as necessary
 import { useUser } from '../hooks/useUser';
 // Mock the entire useUser module
 jest.mock('../hooks/useUser', () => ({
