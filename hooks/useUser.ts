@@ -1,6 +1,8 @@
 import {create} from 'zustand'
 
 interface User {
+    isLoggedIn: boolean; // Add isLoggedIn variable
+    setLoggedIn: (loggedIn: boolean) => void; // Add setLoggedIn function
     userID?: string;
     setUserID: (id: string | undefined) => void;
     userCode?: string;
@@ -22,6 +24,8 @@ interface User {
 }
 
 export const useUser = create<User>((set:any) => ({
+        isLoggedIn: false, // Initialize isLoggedIn as false
+        setLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }), 
         userID:undefined,
         setUserID: (id: string | undefined) => set({ userID: id }),
         userCode:undefined,
@@ -39,6 +43,7 @@ export const useUser = create<User>((set:any) => ({
         userZip:undefined,
         setUserZip: (zip: string | undefined) => set({ userZip: zip}),
         logoutUser: () => set({
+            isLoggedIn: false,
             userID: undefined,
             userCode: undefined,
             userName: undefined,

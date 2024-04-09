@@ -35,19 +35,8 @@ export default function SignUp() {
         setStates(data);
       }
     }
-    
-    async function checkAuth() {
-      const session = await getSession();
-      if (!session) {
-        // If the user is not authenticated, redirect to the homepage
-        router.push('/');
-      }
-    }
-    
-
-    checkAuth();
     fetchStates();
-  }, [router]);
+  }, []);
 
 
   const onSubmit: SubmitHandler<ProfileInfo> = (data) => {
