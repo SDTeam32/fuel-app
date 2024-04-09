@@ -2,6 +2,7 @@
 import {useForm, SubmitHandler} from "react-hook-form"
 import { useEffect } from "react"
 import { Quote, QuoteInput } from "@/types"
+import { useRequireAuth } from '@/utils/auth';
 
 // interface QuoteInput {
 //     gallonsReq: number
@@ -15,7 +16,10 @@ interface FuelQuoteProps {
 }
 
 export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
+
     const {register, handleSubmit, watch, setValue, formState:{errors}} = useForm<Quote>()
+    useRequireAuth();
+
     const fakeAddress: string = "123 Main St, 77032 Houston TX"
     const suggestedPrice: number = 2.42
     const gallonsRequested = watch("gallons_req",0)
@@ -50,18 +54,18 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                 </label>
                 <input {...register("gallons_req",{required: "Please Fill Gallons Requested"})} 
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="gallonsReq" type="number" placeholder="Gallons requested"/>
+                    id="gallons_req" type="number" placeholder="Gallons requested"/>
                 {errors.gallons_req && <p className="text-red-500 text-xs italic">{errors.gallons_req?.message}</p>}
             </div>
             <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddr">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="delivery_addr">
                 Delivery Address
                 </label>
                 {fakeAddress}
                 {/* <input {...register("deliveryAddr")} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="deliveryAddr" type="text" placeholder="1234 Main St"/> */}
             </div>
             <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddr">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="delivery_addr">
                 Delivery Date
                 </label>
                 <input
@@ -72,7 +76,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                         }
                       })}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="deliveryAddr" type="date" />
+                    id="delivery_addr" type="date" />
                 {errors.delivery_date && <p className="text-red-500 text-xs italic">{errors.delivery_date.message}</p>}
             </div> <br/>
             <label className="block text-gray-700 text-sm font-bold mb-2"> Suggested Price  </label>
