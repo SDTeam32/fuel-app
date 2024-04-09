@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { signup } from "@/lib";
 
 
@@ -25,32 +25,17 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
   const user = useUser();
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<SignupInput> = async (info) => {
+  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
     try {
-        const saltRounds = 10;
-        // Corrected to include saltRounds in the hashSync method
-        const hash = bcrypt.hashSync(info.password, saltRounds);
-        const { data, error } = await supabase.from("credentials").insert([{ username: info.username, password: hash }]).select();
-        
-        if (error) {
-          throw error
-        };
-        console.log("Username and Password Inserted Successfully");
-
-        // Assuming you're handling session or user state elsewhere
-        // user.setUserName(data.username);
-        // user.setUserCode(data.password);
-
         await signup(data.username, data.password)
         user.setUserID(data.username);
-        user.setUserNumber(data[0].user_id)
         //onSuccess();
         router.push('/information');
     } catch (error) {
       console.error("Error Signing Up", error);
     }
   };
-
+  
   return (
     <div 
           data-testid="backdrop"
