@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
 import { signup } from "@/lib";
+import { supabase } from "@/utils/supabase/server";
 
 
 interface SignupInput {
@@ -28,6 +29,12 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
   const onSubmit: SubmitHandler<SignupInput> = async (data) => {
     try {
         await signup(data.username, data.password)
+        const {data: resp, error: err} = await supabase.from('credentials').select('user_id').eq(`username`, `${data.username}`)
+        if (err || !resp){ 
+          throw new Error("Username does not exist")
+        }
+        //TODO: need to add all variables to user vaiable
+        user.setUserNumber(resp[0].user_id)
         user.setUserID(data.username);
         //onSuccess();
         router.push('/information');

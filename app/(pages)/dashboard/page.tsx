@@ -30,16 +30,15 @@ export default function Dashboard() {
     //     router.push('/')
     // } 
     const handleQuoteSubmission = async (quote: Quote) => {
-        
-        if (!user.userNumber) {
-            user.setUserNumber(1)
+
+        if (user.userNumber === undefined) {
+            return
         }
-        const userid = user.userNumber
         
         try {
             const { data, error } = await supabase.from("quote").insert([{
                 ...quote,
-                user_id: userid,
+                user_id: user.userNumber,
                 date_created: new Date().toLocaleDateString()
             }]).select()
             
@@ -51,6 +50,7 @@ export default function Dashboard() {
 
             // Add the new quote to the existing quotes
             setQuotes(prevQuotes => [...prevQuotes, instertedQuote]);
+            setShowQuote(false)
 
         } catch (error) {
             console.error("Error inserting quote:", error)

@@ -4,6 +4,9 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./utils/supabase/server";
 import bcrypt from 'bcryptjs';
+import { User } from "./types";``
+
+
 
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
@@ -17,10 +20,15 @@ export async function encrypt(payload: any) {
 }
 
 export async function decrypt(input: string): Promise<any> {
-  const { payload } = await jwtVerify(input, key, {
-    algorithms: ["HS256"],
-  });
-  return payload;
+  try {
+    const { payload } = await jwtVerify(input, key, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch (err) {
+    console.error("error in jwtVerify", err)
+    return null
+  }
 }
 
 export async function login(username: string, password: string) {
@@ -28,19 +36,19 @@ export async function login(username: string, password: string) {
   try {
     const { data: userData, error: userError } = await supabase
       .from('credentials')
-      .select('password')
+      .select()
       .eq('username', username)
-      .single();
-
+      .single<User>();
+    console.log("this is user data from supabase ", userData)
     if (userError || !userData) throw new Error("Username does not exist")
 
     const passwordIsValid = await bcrypt.compareSync(password, userData.password)
 
     if(passwordIsValid) {
       console.log("User logged in successfully");
-      const user = { username: username};
+      const user = {...userData};
         // Create the session
-        const expires = new Date(Date.now() + 5 * 1000);
+        const expires = new Date(Date.now() + 60 * 1000);
         const session = await encrypt({ user, expires });
 
         // Save the session in a cookie
@@ -86,14 +94,19 @@ export async function updateSession(request: NextRequest) {
   if (!session) return;
 
   // Refresh the session so it doesn't expire
-  const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + 5 * 1000);
-  const res = NextResponse.next();
-  res.cookies.set({
-    name: "session",
-    value: await encrypt(parsed),
-    httpOnly: true,
-    expires: parsed.expires,
-  });
-  return res;
+  try {  
+    const parsed = await decrypt(session);
+    console.log(parsed)
+    parsed.expires = new Date(Date.now() + 60 * 1000);
+    const res = NextResponse.next();
+    res.cookies.set({
+      name: "session",
+      value: await encrypt(parsed),
+      httpOnly: true,
+      expires: parsed.expires,
+    });
+    return res;
+  } catch (error) {
+    return
+  }
 }
