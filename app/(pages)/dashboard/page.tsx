@@ -31,8 +31,9 @@ export default function Dashboard() {
     // } 
     const handleQuoteSubmission = async (quote: Quote) => {
         
-        if (!user.userNumber) {
-            user.setUserNumber(1)
+
+        if (user.userNumber === undefined) {
+            console.log("im undefined")
         }
         const userid = user.userNumber
         
