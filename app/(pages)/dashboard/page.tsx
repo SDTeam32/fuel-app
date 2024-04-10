@@ -30,17 +30,15 @@ export default function Dashboard() {
     //     router.push('/')
     // } 
     const handleQuoteSubmission = async (quote: Quote) => {
-        
 
         if (user.userNumber === undefined) {
-            console.log("im undefined")
+            return
         }
-        const userid = user.userNumber
         
         try {
             const { data, error } = await supabase.from("quote").insert([{
                 ...quote,
-                user_id: userid,
+                user_id: user.userNumber,
                 date_created: new Date().toLocaleDateString()
             }]).select()
             

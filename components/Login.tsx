@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from 'next/navigation'
 import { login } from "@/lib";
+import { supabase } from "@/utils/supabase/server";
+import { useUser } from "@/hooks/useUser";
 
 
 interface LoginInput {
@@ -23,16 +25,23 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
   const { register, handleSubmit, watch, formState: { errors }, } = useForm<LoginInput>();
   const router = useRouter()
   const [errorMessage] = useState<string>('');
+  const user = useUser()
 
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
       await login(data.username, data.password);
+      const {data: resp, error: err} = await supabase.from('credentials').select('user_id').eq(`username`, `${data.username}`)
+      if (err || !resp){ 
+        throw new Error("Username does not exist")
+      }
+      //TODO: add all variables to user variable
+      user.setUserNumber(resp[0].user_id)
       onSuccess();
       router.push('/profile');
     } catch (error) {
       console.error("Login error", error);
     }
-};
+  };
 
   return (
     <div 
