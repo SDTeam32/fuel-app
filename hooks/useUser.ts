@@ -1,3 +1,4 @@
+import { Customer } from '@/types';
 import {create} from 'zustand'
 
 interface User {
@@ -22,6 +23,7 @@ interface User {
     userZip?: string;
     setUserZip: (zip: string | undefined) => void;
     logoutUser: () => void;
+    setUser: (user: Customer) => void;
 
 }
 
@@ -59,5 +61,14 @@ export const useUser = create<User>((set:any) => ({
         userState: undefined,
         userZip: undefined,
       }),
+    setUser: (user: Customer) => set({
+        userNumber: user.id,
+        userName: user.name,
+        userAddress1: user.address1,
+        userAddress2: user.address2,
+        userCity: user.city,
+        userState: user.state,
+        userZip: user.zip,
+    })
 })
 )

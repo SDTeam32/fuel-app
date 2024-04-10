@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
@@ -25,20 +25,28 @@ export default function Dashboard() {
     const [quotes, setQuotes] = useState<Quote[]>([{id:0,user_id:0, date_created: date, gallons_req: 64, sug_price: 2.42, total_price:232}]);
     const user = useUser()
     
-    
-    // if(!user.userID){
-    //     router.push('/')
-    // } 
-    const handleQuoteSubmission = async (quote: Quote) => {
-
-        if (user.userNumber === undefined) {
-            return
+    const getQuotes = useCallback(async () => {
+        const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `${user.userNumber}`) 
+        if(error) {
+            throw error
         }
+
+        setQuotes(prevQuotes => [...prevQuotes, ...data ])
+    }, [])
+
+    useEffect(()=> {
+        getQuotes()
+            .catch(console.error)
+
+    }, [getQuotes])
+    
+    const handleQuoteSubmission = async (quote: Quote) => {
+        const userid = user.userNumber
         
         try {
             const { data, error } = await supabase.from("quote").insert([{
                 ...quote,
-                user_id: user.userNumber,
+                user_id: userid,
                 date_created: new Date().toLocaleDateString()
             }]).select()
             
@@ -50,16 +58,14 @@ export default function Dashboard() {
 
             // Add the new quote to the existing quotes
             setQuotes(prevQuotes => [...prevQuotes, instertedQuote]);
-            setShowQuote(false)
 
         } catch (error) {
             console.error("Error inserting quote:", error)
         }
     
-      };
-      const handleNewQuote = () => {
+    };
+    const handleNewQuote = () => {
         setShowQuote(!showQuote)
-        console.log("clicked")
     }
 
     
@@ -77,10 +83,7 @@ export default function Dashboard() {
     }
 
 
-    // useEffect(() => {
-    //     newNotes()
-    // },[handleNewQuote])
-
+ 
     
     //const quotes: QuoteInput[] = [{id:id, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]
     
