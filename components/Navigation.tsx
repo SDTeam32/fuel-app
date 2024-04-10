@@ -53,7 +53,7 @@ export default function Navigation() {
             </span>
           </div>
         </Link>
-        <div className="flex order-2 space-x-3 space-x-0 rtl:space-x-reverse">
+        <div className="flex order-2  space-x-0 rtl:space-x-reverse">
           {/* Conditional rendering for SignUp, Login, and Logout buttons */}
           {!isLoggedIn && (
             <>
