@@ -48,7 +48,7 @@ export async function login(username: string, password: string) {
       console.log("User logged in successfully");
       const user = {...userData};
         // Create the session
-        const expires = new Date(Date.now() + 60 * 1000);
+        const expires = new Date(Date.now() + 1800 * 1000);
         const session = await encrypt({ user, expires });
 
         // Save the session in a cookie
@@ -85,7 +85,10 @@ export async function logout() {
 
 export async function getSession() {
   const session = cookies().get("session")?.value;
-  if (!session) return null;
+  if (!session) {
+    console.log("this is session", session)
+    return null
+  };
   return await decrypt(session);
 }
 
@@ -97,7 +100,7 @@ export async function updateSession(request: NextRequest) {
   try {  
     const parsed = await decrypt(session);
     console.log(parsed)
-    parsed.expires = new Date(Date.now() + 60 * 1000);
+    parsed.expires = new Date(Date.now() + 1800 * 1000);
     const res = NextResponse.next();
     res.cookies.set({
       name: "session",
