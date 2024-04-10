@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { login } from "@/lib";
 import { supabase } from "@/utils/supabase/server";
 import { useUser } from "@/hooks/useUser";
+import { Customer, User } from "@/types";
 
 
 interface LoginInput {
@@ -30,12 +31,27 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
       await login(data.username, data.password);
-      const {data: resp, error: err} = await supabase.from('credentials').select('user_id').eq(`username`, `${data.username}`)
-      if (err || !resp){ 
+      const {data: userCred, error: err} = await supabase
+        .from('credentials')
+        .select<any, User>()
+        .eq(`username`, `${data.username}`)
+        .single()
+
+      if (err){ 
         throw new Error("Username does not exist")
       }
-      //TODO: add all variables to user variable
-      user.setUserNumber(resp[0].user_id)
+
+      const userID = userCred.user_id
+      const {data: userInfo, error: e} = await supabase
+        .from("customers")
+        .select<any, Customer>()
+        .eq('id', `${userID}`)
+        .single()
+      if(e) {
+        throw e
+      }
+
+      user.setUser(userInfo) // sets all variables
       onSuccess();
       router.push('/profile');
     } catch (error) {

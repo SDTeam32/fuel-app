@@ -4,7 +4,7 @@ import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
 import { signup } from "@/lib";
 import { supabase } from "@/utils/supabase/server";
-
+import { User, Customer } from "@/types";
 
 interface SignupInput {
   username: string;
@@ -29,12 +29,19 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
   const onSubmit: SubmitHandler<SignupInput> = async (data) => {
     try {
         await signup(data.username, data.password)
-        const {data: resp, error: err} = await supabase.from('credentials').select('user_id').eq(`username`, `${data.username}`)
-        if (err || !resp){ 
+        const {data: userCred, error: err} = await supabase
+          .from('credentials')
+          .select<any, User>('user_id')
+          .eq(`username`, `${data.username}`)
+          .single()
+        if (err){ 
           throw new Error("Username does not exist")
         }
+        
+
         //TODO: need to add all variables to user vaiable
-        user.setUserNumber(resp[0].user_id)
+
+        user.setUserNumber(userCred.user_id)
         user.setUserID(data.username);
         //onSuccess();
         router.push('/information');

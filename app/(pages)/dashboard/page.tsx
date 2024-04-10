@@ -28,7 +28,7 @@ export default function Dashboard() {
     const getQuotes = useCallback(async () => {
         const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `${user.userNumber}`) 
         if(error) {
-            return 
+            throw error
         }
 
         setQuotes(prevQuotes => [...prevQuotes, ...data ])
@@ -41,10 +41,6 @@ export default function Dashboard() {
     }, [getQuotes])
     
     const handleQuoteSubmission = async (quote: Quote) => {
-        
-        if (!user.userNumber) {
-            user.setUserNumber(1)
-        }
         const userid = user.userNumber
         
         try {
