@@ -42,6 +42,16 @@ export default function Navigation() {
     setShowSignUp(true);
   };
 
+  const handleProfileClick = () => {
+    if(isLoggedIn)
+      router.push('/profile');
+  };
+
+  const handleDashboardClick = () => {
+    if(isLoggedIn)
+      router.push('/dashboard');
+  };
+
   return (
     <nav className="bg-white dark:bg-gray-900 relative w-full z-2 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -60,7 +70,7 @@ export default function Navigation() {
               <button
                 onClick={handleSignUpClick} // Show SignUp component on click
                 type="button"
-                className="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:border-gray-600 dark:text-blue-600 dark:hover:bg-blue-700 dark:hover:text-white dark:focus:ring-blue-800"
+                className="text-blue-700 mr-2 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:border-gray-600 dark:text-blue-600 dark:hover:bg-blue-700 dark:hover:text-white dark:focus:ring-blue-800"
               >
                 Sign Up
               </button>
@@ -100,22 +110,20 @@ export default function Navigation() {
               </Link>
             </li>
             <li>
-              <Link href="/dashboard">
-                <div
+                <button
+                  onClick={handleDashboardClick}
                   className={`block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${isActive('/dashboard')}`}
                 >
                   Dashboard
-                </div>
-              </Link>
+                </button>
             </li>
             <li>
-              <Link href="/profile">
-                <div
+                <button
+                  onClick={handleProfileClick}
                   className={`block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${isActive('/profile')}`}
                 >
                   Profile
-                </div>
-              </Link>
+                </button>
             </li>
           </ul>
         </div>
