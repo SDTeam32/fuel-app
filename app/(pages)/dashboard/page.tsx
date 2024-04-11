@@ -26,6 +26,7 @@ export default function Dashboard() {
     const user = useUser()
     
     const getQuotes = useCallback(async () => {
+        console.log("calling get quotes")
         const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `${user.userNumber}`) 
         if(error) {
             throw error
@@ -66,20 +67,6 @@ export default function Dashboard() {
     };
     const handleNewQuote = () => {
         setShowQuote(!showQuote)
-    }
-
-    
-
-    const newQuote = async (quote:QuoteInput) => {
-        try {
-            const {  error } = await supabase.from("quote").insert(quote);
-            if (error) {
-                throw error
-            }
-        } catch (error) {
-            console.error("Error inserting new quote:", error);
-            return null; 
-        }
     }
 
 
