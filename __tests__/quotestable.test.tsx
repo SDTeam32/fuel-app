@@ -1,48 +1,57 @@
-import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import QuotesTable from '../components/QuotesTable';
+import Modal from '../components/Modal';
 
-// Mocking the array of quotes
-const quotesMock = [
-  {
-    id: 1,
-    dateCreated: '2024-03-28',
-    gallonsReq: 64,
-    sugPrice: 2.42,
-    totalPrice: 154.88
-  },
-  {
-    id: 2,
-    dateCreated: '2024-03-29',
-    gallonsReq: 100,
-    sugPrice: 2.5,
-    totalPrice: 250
-  }
-];
+describe('<QuotesTable />', () => {
+  const mockQuotes = [
+    {
+      id: 1,
+      dateCreated: '2024-03-29',
+      noGallons: '100',
+      rate: '2.50',
+      totalPrice: '250.00'
+    },
+    {
+      id: 2,
+      dateCreated: '2024-03-30',
+      noGallons: '200',
+      rate: '2.75',
+      totalPrice: '550.00'
+    }
+  ];
 
-describe('QuotesTable component', () => {
-  it('renders table with correct number of rows', () => {
-    const { getAllByRole } = render(<QuotesTable quotes={quotesMock} />);
-    const rows = getAllByRole('row');
-
-    // There should be a header row and one row for each quote
-    expect(rows.length).toBe(quotesMock.length + 1);
+  beforeEach(() => {
+    render(<QuotesTable quotes={mockQuotes} />);
   });
 
-  it('opens modal with correct quote details when row is clicked', () => {
-    const { getByText, queryByText } = render(<QuotesTable quotes={quotesMock} />);
-    
-    // Initially, modal should not be visible
-    expect(queryByText('Date Created: 2024-03-28')).toBeNull();
-
-    // Click on the first row to open modal
-    fireEvent.click(getByText('2024-03-28'));
-
-    // Check if modal displays correct quote details
-    expect(getByText('Date Created: 2024-03-28')).toBeInTheDocument();
-    expect(getByText('# of Gallons: 64')).toBeInTheDocument();
-    expect(getByText('Rate: 2.42')).toBeInTheDocument();
-    expect(getByText('Total Price: 154.88')).toBeInTheDocument();
+  it('renders the table with the correct headers', () => {
+    expect(screen.getByText('Date Created')).toBeInTheDocument();
+    expect(screen.getByText('# of Gallons')).toBeInTheDocument();
+    expect(screen.getByText('Rate')).toBeInTheDocument();
+    expect(screen.getByText('Total Price')).toBeInTheDocument();
   });
 
-  // Add more tests as needed
+  it('displays the correct quote information', () => {
+    expect(screen.getByText('2024-03-29')).toBeInTheDocument();
+    expect(screen.getByText('100')).toBeInTheDocument();
+    expect(screen.getByText('2.50')).toBeInTheDocument();
+    expect(screen.getByText('250.00')).toBeInTheDocument();
+
+    expect(screen.getByText('2024-03-30')).toBeInTheDocument();
+    expect(screen.getByText('200')).toBeInTheDocument();
+    expect(screen.getByText('2.75')).toBeInTheDocument();
+    expect(screen.getByText('550.00')).toBeInTheDocument();
+  });
+
+  it('opens the modal when a row is clicked', () => {
+    fireEvent.click(screen.getAllByText('2024-03-29')[0]); // Click on the first row
+    expect(screen.getByTestId('modal')).toBeInTheDocument(); 
+  });
+
+  it('closes the modal when the close button is clicked', () => {
+    fireEvent.click(screen.getAllByText('2024-03-29')[0]); // Open the modal
+    fireEvent.click(screen.getByTestId('modal-close-button')); // Click the close button, assuming you have data-testid="modal-close-button"
+    expect(screen.queryByTestId('modal')).toBeNull();
+  });
 });
