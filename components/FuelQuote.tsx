@@ -1,15 +1,46 @@
 "use client"
 import {useForm, SubmitHandler} from "react-hook-form"
+import { useEffect } from "react"
+import { Quote, QuoteInput } from "@/types"
+import { useRequireAuth } from '@/utils/auth';
 
-interface QuoteInput {
-    gallonsReq: number
-    deliveryAddr: string
-    deliveryDate: string
+// interface QuoteInput {
+//     gallonsReq: number
+//     deliveryAddr: string
+//     deliveryDate: string
+//     sugPrice: number
+//     totalPrice: number
+// }
+interface FuelQuoteProps {
+    sendQuote: (data: Quote) => void;
 }
 
-export default function FuelQuote() {
-    const {register, handleSubmit} = useForm<QuoteInput>()
-    const onSubmit: SubmitHandler<QuoteInput> = (data) => {
+export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
+
+    const {register, handleSubmit, watch, setValue, formState:{errors}} = useForm<Quote>()
+    useRequireAuth();
+
+    const fakeAddress: string = "123 Main St, 77032 Houston TX"
+    const suggestedPrice: number = 2.42
+    const gallonsRequested = watch("gallons_req",0)
+    
+    useEffect(() => {
+        // Set the default value for deliveryAddr on component mount
+        setValue('delivery_addr', fakeAddress);
+      }, [setValue]);
+
+    const calculateTotalPrice = (gallons: number) => {
+        const totalPrice:string = (gallons * suggestedPrice).toFixed(2)
+        return  Number(totalPrice)
+      };
+    const totalPrice:number = calculateTotalPrice(gallonsRequested)
+
+    const onSubmit: SubmitHandler<Quote> = (data:Quote) => {
+        data.gallons_req = Number(data.gallons_req)
+        data.sug_price = suggestedPrice
+        data.total_price = totalPrice
+
+        sendQuote(data)
         //send to db logic
         //insert into quote table?
         console.log(data)
@@ -21,22 +52,37 @@ export default function FuelQuote() {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gallonsReq">
                 Gallons Requested
                 </label>
-                <input {...register("gallonsReq")} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="gallonsReq" type="number" placeholder="Gallons requested"/>
+                <input {...register("gallons_req",{required: "Please Fill Gallons Requested"})} 
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                    id="gallons_req" type="number" placeholder="Gallons requested"/>
+                {errors.gallons_req && <p className="text-red-500 text-xs italic">{errors.gallons_req?.message}</p>}
             </div>
             <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddr">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="delivery_addr">
                 Delivery Address
                 </label>
-                <input {...register("deliveryAddr")} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="deliveryAddr" type="text" placeholder="1234 Main St"/>
+                {fakeAddress}
+                {/* <input {...register("deliveryAddr")} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="deliveryAddr" type="text" placeholder="1234 Main St"/> */}
             </div>
             <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddr">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="delivery_addr">
                 Delivery Date
                 </label>
-                <input {...register("deliveryDate")}  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="deliveryAddr" type="date" />
-            </div>
-            <span className="text-black">suggested price</span><br/>
-            <span className="text-black"> total amount due</span>
+                <input
+                    {...register("delivery_date", {
+                        required: "Please Fill Date",
+                        validate: {
+                          isFutureDate: (value:any) => new Date(value) > new Date() || "Date must be in the future"
+                        }
+                      })}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
+                    id="delivery_addr" type="date" />
+                {errors.delivery_date && <p className="text-red-500 text-xs italic">{errors.delivery_date.message}</p>}
+            </div> <br/>
+            <label className="block text-gray-700 text-sm font-bold mb-2"> Suggested Price  </label>
+            <span className="text-black">{suggestedPrice}</span><br/>
+            <label className="block text-gray-700 text-sm font-bold mb-2"> Total Price  </label>
+            <span className="text-black">{totalPrice}</span>
             <div className="flex justify-center">
                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Submit

@@ -1,6 +1,8 @@
 import Modal from './Modal';
 import QuotesDetail from './QuotesDetail';
 import React, { useState } from 'react';
+import { QuoteInput, Quote } from '@/types';
+import { useRequireAuth } from '@/utils/auth';
 
 import {
     Table,
@@ -12,18 +14,22 @@ import {
     Text
   } from '@tremor/react';
   
-  interface Quote {
-    id: number;
-    dateCreated: string;
-    noGallons: string;
-    rate: string; //maybe change to number
-    totalPrice:string
-  }
+  // interface Quote {
+  //   id: number;
+  //   dateCreated: string;
+  //   noGallons: string;
+  //   rate: string; //maybe change to number
+  //   totalPrice:string
+  // }
 
   
+
   export default function QuotesTable({ quotes }: { quotes: Quote[] }) {
+    useRequireAuth();
     const [showDetail, setShowDetail] = useState(false)
-    const handleDetail = () => {
+    const [currentQuote, setCurrentQuote] = useState<Quote | undefined>()
+    const handleDetail = (quote: Quote) => {
+      setCurrentQuote(quote)
       setShowDetail(!showDetail)
     }
   
@@ -39,22 +45,23 @@ import {
         </TableHead>
         <TableBody>
           {quotes.map((quote) => (
-            <TableRow key={quote.id} onClick={() => handleDetail()} className='bg-black'>
-              <TableCell>{quote.dateCreated}</TableCell>
+            <TableRow key={quote.id} onClick={() => handleDetail(quote)} className='hover:bg-gray-100 cursor-pointer'>
+              <TableCell>{quote.date_created}</TableCell>
               <TableCell>
-                <Text>{quote.noGallons}</Text>
+                <Text>{quote.gallons_req}</Text>
               </TableCell>
               <TableCell>
-                <Text>{quote.rate}</Text>
+                <Text>{quote.sug_price}</Text>
               </TableCell>
               <TableCell>
-                <Text>{quote.totalPrice}</Text>
+                <Text>{quote.total_price}</Text>
               </TableCell>
             </TableRow>
+            
           ))}
         </TableBody>
         <Modal show={showDetail} onClose={() => setShowDetail(false)}>
-          <QuotesDetail/>
+        {currentQuote && <QuotesDetail key={currentQuote.id} quote={currentQuote} />}
         </Modal>
       </Table>
     )

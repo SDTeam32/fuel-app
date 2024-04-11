@@ -1,30 +1,96 @@
 "use client"
-import { useState } from 'react';
-import QuotesTable from '@/components/QuotesTable';
+import { useState, useEffect, useCallback } from 'react';
+import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react';
-import NavBar from '@/components/NavBar';
+import { Quote, QuoteInput } from '@/types';
+import { useUser } from '../../../hooks/useUser';
+import { supabase } from '@/utils/supabase/server';
+import Navigation from '@/components/Navigation';
+import { useRequireAuth } from '@/utils/auth';
 
-interface Quote {
-    id: number;
-    dateCreated: string;
-    noGallons: string;
-    rate: string; //maybe change to number
-    totalPrice:string
-  }
 
-export default function dashboard() {
+
+const date = new Date().toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric'
+  });
+
+export default function Dashboard() {
+    useRequireAuth();
+
     const [showQuote, setShowQuote] = useState(false)
-    const quotes: Quote[] = [{id:1, dateCreated:"02/23/2001", noGallons:"64", rate:"2.42", totalPrice:"154.88"}]
+    const [quotes, setQuotes] = useState<Quote[]>([{id:0,user_id:0, date_created: date, gallons_req: 64, sug_price: 2.42, total_price:232}]);
+    const user = useUser()
+    
+    const getQuotes = useCallback(async () => {
+        const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `${user.userNumber}`) 
+        if(error) {
+            throw error
+        }
+
+        setQuotes(prevQuotes => [...prevQuotes, ...data ])
+    }, [])
+
+    useEffect(()=> {
+        getQuotes()
+            .catch(console.error)
+
+    }, [getQuotes])
+    
+    const handleQuoteSubmission = async (quote: Quote) => {
+        const userid = user.userNumber
+        
+        try {
+            const { data, error } = await supabase.from("quote").insert([{
+                ...quote,
+                user_id: userid,
+                date_created: new Date().toLocaleDateString()
+            }]).select()
+            
+            if(error) {
+                throw error
+            }
+            const instertedQuote = data[0]
+            console.log("quote inserted successfully", instertedQuote)
+
+            // Add the new quote to the existing quotes
+            setQuotes(prevQuotes => [...prevQuotes, instertedQuote]);
+
+        } catch (error) {
+            console.error("Error inserting quote:", error)
+        }
+    
+    };
     const handleNewQuote = () => {
         setShowQuote(!showQuote)
-        console.log("clicked")
     }
+
+    
+
+    const newQuote = async (quote:QuoteInput) => {
+        try {
+            const {  error } = await supabase.from("quote").insert(quote);
+            if (error) {
+                throw error
+            }
+        } catch (error) {
+            console.error("Error inserting new quote:", error);
+            return null; 
+        }
+    }
+
+
+ 
+    
+    //const quotes: QuoteInput[] = [{id:id, dateCreated: date, gallonsReq: 64, sugPrice: 2.42, totalPrice:232}]
+    
     return (
         <>
-            {/* <NavBar user={{}}/> */}
-            <main className="px-4 pt-0 md:p-10 mx-auto max-w-7xl bg-gray-50">
+        
+            <main className="px-4 md:p-10 mx-auto max-w-7xl bg-gray-50 pt-10">
                 <div className='flex justify-between'>
                     <div>
                             <Title>Quotes</Title>
@@ -48,7 +114,7 @@ export default function dashboard() {
                     <QuotesTable quotes={quotes} />
                 </Card>
                 <Modal show={showQuote} onClose={() => setShowQuote(false)}>
-                    <FuelQuote />
+                    <FuelQuote sendQuote={handleQuoteSubmission} />
                 </Modal>
             </main>
         </>

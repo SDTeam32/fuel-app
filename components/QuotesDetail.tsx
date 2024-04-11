@@ -1,4 +1,12 @@
-export default function QuotesDetail() {
+"use client"
+import { useUser } from "@/hooks/useUser";
+import { QuoteInput, Quote } from "@/types";
+import { useRequireAuth } from '@/utils/auth';
+
+export default function QuotesDetail({quote}: {quote:Quote}) {
+  useRequireAuth();
+  const user = useUser()
+
   const quoteDetails = {
     dateCreated: '02/23/2001',
     numberOfGallons: 64,
@@ -33,18 +41,21 @@ export default function QuotesDetail() {
     <div style={{ maxWidth: '600px', margin: 'auto' }}>
       <div style={cardStyle}>
         <div style={headerStyle}>Personal Information</div>
-        <p><strong>Name:</strong> {quoteDetails.name}</p>
-        <p><strong>Address:</strong> {quoteDetails.address}</p>
-        <p><strong>City:</strong> {quoteDetails.city}</p>
-        <p><strong>State:</strong> {quoteDetails.state}</p>
+        <p><strong>Name:</strong> {user.userName}</p>
+        <p><strong>Address:</strong> {quote.delivery_addr}</p>
+        {user.userAddress2 && <p><strong>Address2:</strong> {user.userAddress2}</p>}
+        <p><strong>City:</strong> {user.userCity}</p>
+        <p><strong>State:</strong> {user.userState}</p>
       </div>
 
       <div style={cardStyle}>
         <div style={headerStyle}>Quote Information</div>
-        <p><strong>Date Created:</strong> {quoteDetails.dateCreated}</p>
-        <p><strong># of Gallons:</strong> {quoteDetails.numberOfGallons}</p>
-        <p><strong>Rate:</strong> ${quoteDetails.rate.toFixed(2)}</p>
-        <p><strong>Total Price:</strong> ${quoteDetails.totalPrice.toFixed(2)}</p>
+        <p><strong>Date Created:</strong> {quote.date_created}</p>
+        <p><strong>Delivery Date:</strong> {quote.delivery_date}</p>
+        <p><strong>Delivery Address:</strong> {quote.delivery_addr}</p>
+        <p><strong># of Gallons:</strong> {quote.gallons_req}</p>
+        <p><strong>Rate:</strong> {quote.sug_price}</p>
+        <p><strong>Total Price:</strong> {quote.total_price}</p>
       </div>
     </div>
   );
