@@ -1,177 +1,135 @@
-import React, { useRef } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useUser } from '../hooks/useUser';
-import { useRouter } from 'next/navigation';
-import { signup } from "@/lib";
-import { supabase } from "@/utils/supabase/server";
-import { User, Customer } from "@/types";
+// SignUp.test.js
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import SignUp from './ProfileForm';
 
-interface SignupInput {
-  username: string;
-  password: string;
-  password2: string;
-}
+// Mock useRouter
+const mockPush = jest.fn();
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}));
 
-interface ModalProps {
-  show: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
-}
+// Mock supabase
+const mockSelect = jest.fn();
+jest.mock('@/utils/supabase/server', () => ({
+  supabase: {
+    from: () => ({
+      select: mockSelect,
+    }),
+  },
+}));
 
-export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
-  if (!show) {
-    return null;
-  }
-  const { register, handleSubmit, watch, formState: { errors }, } = useForm<SignupInput>();
-  const user = useUser();
-  const router = useRouter();
+// Mock useUser
+const mockSetUserName = jest.fn();
+const mockSetUserAddress1 = jest.fn();
+const mockSetUserAddress2 = jest.fn();
+const mockSetUserCity = jest.fn();
+const mockSetUserState = jest.fn();
+const mockSetUserZip = jest.fn();
+jest.mock('../hooks/useUser', () => ({
+  useUser: () => ({
+    setUserName: mockSetUserName,
+    setUserAddress1: mockSetUserAddress1,
+    setUserAddress2: mockSetUserAddress2,
+    setUserCity: mockSetUserCity,
+    setUserState: mockSetUserState,
+    setUserZip: mockSetUserZip,
+  }),
+}));
 
-  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
-    try {
-        await signup(data.username, data.password)
-        const {data: userCred, error: err} = await supabase
-          .from('credentials')
-          .select<any, User>('user_id')
-          .eq(`username`, `${data.username}`)
-          .single()
-        if (err){ 
-          throw new Error("Username does not exist")
-        }
-        
+describe('SignUp', () => {
+  beforeEach(() => {
+    mockPush.mockReset();
+    mockSelect.mockReset();
+    mockSetUserName.mockReset();
+    mockSetUserAddress1.mockReset();
+    mockSetUserAddress2.mockReset();
+    mockSetUserCity.mockReset();
+    mockSetUserState.mockReset();
+    mockSetUserZip.mockReset();
+    mockSelect.mockResolvedValue({ data: [{ state_abbreviation: 'TX', id: 1 }], error: null });
+  });
 
-        //TODO: need to add all variables to user vaiable
+  it('should render correctly with all fields', () => {
+    render(<SignUp />);
+    expect(screen.getByPlaceholderText('Full Name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Address 1')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Address 2')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('City')).toBeInTheDocument();
+    expect(screen.getByLabelText('State')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('ZIP')).toBeInTheDocument();
+  });
 
-        user.setUserNumber(userCred.user_id)
-        user.setUserID(data.username);
-        //onSuccess();
-        router.push('/information');
-    } catch (error) {
-      console.error("Error Signing Up", error);
-    }
-  };
-  
-  return (
-    <div 
-          data-testid="backdrop"
-          className="fixed inset-0 m-12 p-10 z-10" id="my-modal" onClick={onClose} style={{backgroundColor: "rgba(0,0,0,0.5)", margin: "0"}}> 
-          <div className=" bg-gray-100 relative top-1/4 mx-auto p-5 border w-11/12 md:max-w-md shadow-lg rounded-md "  onClick={e => e.stopPropagation()} >
-              <div className="items-center px-4 py-3">
-                <div className="flex justify-end">
-                    <button
-                        id="ok-btn"
-                        data-testid="close-modal-button"
-                        className=" "
-                        onClick={onClose}
-                        >
-                        <img className="block w-6 h-6" src="/images/closeIMG.png" alt="notWorking"/>
-                    </button>
-                </div>
-                <div className="mt-3 text-center"></div>
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="wd-80 shadow-md rounded px-8 pt-6 pb-8 mb-4"
-                  >
-                  <div className="text-center block text-gray-700 text-2xl font-bold mb-2">Sign Up</div>
-                    <div className="mb-4">
-                      <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="username"
-                      >
-                        Username<span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        {...register("username", { required: true, maxLength: 20, minLength: 3 })}
-                        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          errors.username ? "border-red-500" : ""
-                        }`}
-                        id="username"
-                        type="text"
-                        placeholder="Username"
-                      />
-                      {errors.username && (
-                      <p className="text-red-500 text-xs italic">
-                        {errors.username.type === "required"
-                          ? "Required."
-                          : errors.username.type === "maxLength"
-                          ? "At most 20 characters."
-                          : "At least 3 characters."
-                        }
-                      </p>
-                    )}
-                    </div>
-                    <div className="mb-4">
-                      <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="password"
-                      >
-                        Password<span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        {...register("password", { required: true, minLength: 8,  maxLength: 50 })}
-                        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          errors.password ? "border-red-500" : ""
-                        }`}
-                        id="password"
-                        type="password"
-                        placeholder="Password"
-                      />
-                      {errors.password && (
-                      <p className="text-red-500 text-xs italic">
-                        {errors.password.type === "required"
-                          ? "Required."
-                          : errors.password.type === "maxLength"
-                          ? "At most 50 characters."
-                          : "At least 8 characters."
-                        }
-                      </p>
-                    )}
-                    </div>
-                    <div className="mb-4">
-                      <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="password2"
-                      >
-                        Confirm Password<span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        {...register("password2", {
-                          required: true, minLength: 8, maxLength: 50,
-                          validate: (val: string) => {
-                            if (watch("password") !== val) {
-                              return "Your passwords do not match";
-                            }
-                          },
-                        })}
-                        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          errors.password2 ? "border-red-500" : ""
-                        }`}
-                        id="password2"
-                        type="password"
-                        placeholder="Confirm Password"
-                      />
-                      {errors.password2 && (
-                      <p className="text-red-500 text-xs italic">
-                        {errors.password2.type === "required"
-                          ? "Required."
-                          : errors.password2.type === "maxLength"
-                          ? "At most 50 characters."
-                          : "At least 8 characters."
-                        }
-                      </p>
-                    )}
-                    </div>
-                    
-                    <div className="flex justify-center">
-                      <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </form>
-                  </div>
-              </div>
-          </div>
-  );
-}
+  it('should handle state selection and form submission', async () => {
+    render(<SignUp />);
+    userEvent.type(screen.getByPlaceholderText('Full Name'), 'John Doe');
+    userEvent.type(screen.getByPlaceholderText('Address 1'), '123 Main St');
+    userEvent.type(screen.getByPlaceholderText('Address 2'), 'Apt 4');
+    userEvent.type(screen.getByPlaceholderText('City'), 'Metropolis');
+    userEvent.selectOptions(screen.getByLabelText('State'), 'TX');
+    userEvent.type(screen.getByPlaceholderText('ZIP'), '12345');
+    fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/profile');
+      expect(mockSetUserName).toHaveBeenCalledWith('John Doe');
+      expect(mockSetUserAddress1).toHaveBeenCalledWith('123 Main St');
+      expect(mockSetUserAddress2).toHaveBeenCalledWith('Apt 4');
+      expect(mockSetUserCity).toHaveBeenCalledWith('Metropolis');
+      expect(mockSetUserState).toHaveBeenCalledWith('TX');
+      expect(mockSetUserZip).toHaveBeenCalledWith('12345');
+    });
+  });
+
+  it('should fetch states on component mount', async () => {
+    render(<SignUp />);
+    await waitFor(() => {
+      expect(mockSelect).toHaveBeenCalled();
+    });
+  });
+
+  it('should show an error if state fetching fails', async () => {
+    mockSelect.mockRejectedValueOnce(new Error('Failed to fetch'));
+    render(<SignUp />);
+    await waitFor(() => {
+      expect(console.error).toHaveBeenCalledWith('Error fetching states:', expect.any(Error));
+    });
+  });
+
+  // Test if all form validations work correctly
+  it('should validate form fields before submission', async () => {
+    render(<SignUp />);
+    fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
+    await waitFor(() => {
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+    expect(screen.getByText('Required.')).toBeInTheDocument();
+  });
+
+  // Test the form interaction with each input
+  it('should update state on user input', () => {
+    render(<SignUp />);
+    const nameInput = screen.getByPlaceholderText('Full Name') as HTMLInputElement;
+    const addressInput = screen.getByPlaceholderText('Address 1') as HTMLInputElement;
+    userEvent.type(nameInput, 'Jane');
+    userEvent.type(addressInput, '123 Elm Street');
+    expect(nameInput.value).toBe('Jane');
+    expect(addressInput.value).toBe('123 Elm Street');
+  });
+
+  // Simulate a button click for submission if your form uses a button
+  it('should call onSubmit when the submit button is clicked', async () => {
+    render(<SignUp />);
+    userEvent.type(screen.getByPlaceholderText('Full Name'), 'John Doe');
+    userEvent.type(screen.getByPlaceholderText('Address 1'), '123 Main St');
+    // ... fill in other fields ...
+    const submitButton = screen.getByRole('button', { name: /submit/i });
+    userEvent.click(submitButton);
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/profile');
+    });
+  });
+});

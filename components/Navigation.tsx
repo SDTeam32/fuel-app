@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation'
 import { getSession, logout } from "@/lib"; // Import useUser hook
 import Login from "./Login";
-import SignUp from "./Signup"; // Import the SignUp component
 import { useUser } from "@/hooks/useUser";
+import SignUp from "./ProfileForm";
 
 function isActive(route: string) {
   const pathname = usePathname()
@@ -84,7 +84,6 @@ export default function Navigation() {
           )}
           {/* Conditional rendering for SignUp and Login components */}
           {showLogin && <Login show={showLogin} onClose={() => setShowLogin(false)} onSuccess={() => {setShowLogin(false); setLoggedIn(true);}}/>}
-          {showSignUp && <SignUp show={showSignUp} onClose={() => setShowSignUp(false)} onSuccess={() => {setShowSignUp(false); setLoggedIn(true);}}/>}
         </div>
         
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">

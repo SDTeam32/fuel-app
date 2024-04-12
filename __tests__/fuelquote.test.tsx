@@ -1,11 +1,14 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import FuelQuote from '../components/FuelQuote';
+import { Quote } from '@/types';
 
 describe('<FuelQuote />', () => {
     // Test 1: Component renders correctly
     it('renders the form with all fields and submit button', () => {
-      render(<FuelQuote />);
+      render(<FuelQuote sendQuote={function (data: Quote): void {
+        throw new Error('Function not implemented.');
+      } } />);
 
       expect(screen.getByLabelText('Gallons Requested')).toBeInTheDocument();
       expect(screen.getByLabelText('Delivery Address')).toBeInTheDocument();
@@ -15,7 +18,9 @@ describe('<FuelQuote />', () => {
 
     // Test 2: Submitting form with data
     it('submits the form with entered data', () => {
-      render(<FuelQuote />);
+      render(<FuelQuote sendQuote={function (data: Quote): void {
+        throw new Error('Function not implemented.');
+      } } />);
 
       fireEvent.change(screen.getByLabelText('Gallons Requested'), { target: { value: '100' } });
       fireEvent.change(screen.getByLabelText('Delivery Address'), { target: { value: '1234 Main St' } });
