@@ -1,10 +1,8 @@
 "use client"
-import { useUser } from "@/hooks/useUser";
-import { QuoteInput, Quote } from "@/types";
-import { useRequireAuth } from '@/utils/auth';
+import { useUser } from "../hooks/useUser";
+import { QuoteInput, Quote } from "../types";
 
 export default function QuotesDetail({quote}: {quote:Quote}) {
-  useRequireAuth();
   const user = useUser()
 
   const quoteDetails = {

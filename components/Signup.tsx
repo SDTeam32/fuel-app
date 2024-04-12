@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
-import { signup } from "@/lib";
 import { supabase } from "@/utils/supabase/server";
 import { User, Customer } from "@/types";
 import bcrypt from 'bcryptjs'
@@ -55,7 +54,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
         const {data: userCred, error: err} = await supabase
           .from('credentials')
           .select<any, User>('user_id')
-          .eq(`username`, `${data.username}`)
+          .eq(`username`, `valerio`)
           .single()
 
         if (err){ 

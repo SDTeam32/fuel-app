@@ -6,7 +6,6 @@ import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
 import { supabase } from "@/utils/supabase/server";
 import { State } from "@/types";
-import { getSession } from "@/lib";
 
 interface ProfileInfo {
   name: string;
