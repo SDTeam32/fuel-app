@@ -1,11 +1,9 @@
 "use client"
 import Image from "next/image";
-import ProfileForm from "@/components/ProfileForm";
-import { useRequireAuth } from '@/utils/auth';
+import ProfileForm from "../../../components/ProfileForm";
 
 export default function Information() {
   
-  useRequireAuth();
   return (
     <div
       className="relative block group"

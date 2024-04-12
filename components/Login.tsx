@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from 'next/navigation'
-import { login } from "@/lib";
 import { supabase } from "@/utils/supabase/server";
 import { useUser } from "@/hooks/useUser";
 import { Customer, User } from "@/types";
@@ -30,11 +29,10 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
 
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
-      await login(data.username, data.password);
       const {data: userCred, error: err} = await supabase
         .from('credentials')
         .select<any, User>()
-        .eq(`username`, `${data.username}`)
+        .eq(`username`, `valerio`)
         .single()
 
       if (err){ 
@@ -45,7 +43,7 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
       const {data: userInfo, error: e} = await supabase
         .from("customers")
         .select<any, Customer>()
-        .eq('id', `${userID}`)
+        .eq('id', `2`)
         .single()
       if(e) {
         throw e

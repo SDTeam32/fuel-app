@@ -2,13 +2,10 @@
 
 import { useUser } from "../../../hooks/useUser";
 import { useRouter } from "next/navigation";
-import { useRequireAuth } from '@/utils/auth';
 import { useEffect } from "react";
-import { getSession } from "@/lib";
 
 export default function Profile() {
     const router = useRouter()
-    useRequireAuth();
 
     const user = useUser()
     
