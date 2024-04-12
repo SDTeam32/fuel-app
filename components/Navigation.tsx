@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation'
-import { getSession, logout } from "@/lib"; // Import useUser hook
 import Login from "./Login";
 import SignUp from "./Signup"; // Import the SignUp component
 import { useUser } from "@/hooks/useUser";
@@ -17,17 +16,8 @@ export default function Navigation() {
   const [showSignUp, setShowSignUp] = useState(false); // State to control SignUp component visibility
   const { isLoggedIn, setLoggedIn } = useUser(); // Use isLoggedIn state from useUser hook
   const router = useRouter()
-
-  useEffect(() => {
-    async function checkSession() {
-      const session = await getSession();
-      setLoggedIn(!!session); // Update isLoggedIn using setLoggedIn from useUser hook
-    }
-    checkSession();
-  }, [setLoggedIn]); // Listen for changes in setLoggedIn
   
   const handleLogout = async () => {
-    await logout();
     setLoggedIn(false); // Update isLoggedIn using setLoggedIn from useUser hook
     setShowLogin(false);
     setShowSignUp(false);

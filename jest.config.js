@@ -1,6 +1,8 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
+    // setupFiles: ['./jest.setup.ts'],
+    // setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
     moduleNameMapper: {
       // Handle module aliases (if you have them configured in your tsconfig.json)
       "^@/components/(.*)$": "<rootDir>/components/$1",

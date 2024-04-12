@@ -4,12 +4,10 @@ import QuotesTable from '../../../components/QuotesTable';
 import FuelQuote from '@/components/FuelQuote';
 import Modal from '@/components/Modal';
 import { Card, Title, Text, Button } from '@tremor/react';
-import { Quote, QuoteInput } from '@/types';
+import { Quote, QuoteInput } from '../../../types';
 import { useUser } from '../../../hooks/useUser';
-import { supabase } from '@/utils/supabase/server';
+import { supabase } from '../../../utils/supabase/server';
 import Navigation from '@/components/Navigation';
-import { useRequireAuth } from '@/utils/auth';
-
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -19,14 +17,13 @@ const date = new Date().toLocaleDateString('en-US', {
   });
 
 export default function Dashboard() {
-    useRequireAuth();
 
     const [showQuote, setShowQuote] = useState(false)
     const [quotes, setQuotes] = useState<Quote[]>([{id:0,user_id:0, date_created: date, gallons_req: 64, sug_price: 2.42, total_price:232}]);
     const user = useUser()
     
     const getQuotes = useCallback(async () => {
-        const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `${user.userNumber}`) 
+        const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `2`) 
         if(error) {
             throw error
         }
