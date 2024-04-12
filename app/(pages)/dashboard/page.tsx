@@ -83,6 +83,7 @@ export default function Dashboard() {
                         </div>
                         <div className='flex justify-end items-end	' style={{marginLeft:"8.8rem"}}>
                             <button
+                                    data-testid="newquote"
                                     onClick={handleNewQuote}
                                     className=" flex items-center justify-center bg-blue-500 w-28 h-8 rounded"
                                     aria-label="Add new quote"
