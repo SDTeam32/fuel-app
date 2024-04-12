@@ -4,6 +4,7 @@ module.exports = {
     // setupFiles: ['./jest.setup.ts'],
     // setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
     moduleNameMapper: {
+      '\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
       // Handle module aliases (if you have them configured in your tsconfig.json)
       "^@/components/(.*)$": "<rootDir>/components/$1",
     },

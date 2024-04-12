@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useRouter } from 'next/navigation'; // Import useRouter hook for redirection
 import { gsap } from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin'; // Import TextPlugin for text animation
-import { useUser } from '@/hooks/useUser';
-import Login from '@/components/Login';
+import { useUser } from '../hooks/useUser';
+import Login from '../components/Login';
 
 gsap.registerPlugin(TextPlugin); // Register TextPlugin with GSAP
 
