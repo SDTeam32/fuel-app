@@ -5,6 +5,7 @@ import { login } from "@/lib";
 import { supabase } from "@/utils/supabase/server";
 import { useUser } from "@/hooks/useUser";
 import { Customer, User } from "@/types";
+import bcrypt from 'bcryptjs'
 
 
 interface LoginInput {
@@ -28,9 +29,42 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
   const [errorMessage] = useState<string>('');
   const user = useUser()
 
+  const loginUser = async (username:string, password:string) => {
+    try {
+      const { data: userData, error: userError } = await supabase
+        .from('credentials')
+        .select()
+        .eq('username', username)
+        .single<User>();
+      if (userError){ 
+        throw new Error("Username does not exist")
+      }
+      const passwordIsValid = bcrypt.compareSync(password, userData.password)
+  
+      if(passwordIsValid) {
+        const currUser = userData
+        const {data: userInfo, error: e} = await supabase
+          .from("customers")
+          .select<any, Customer>()
+          .eq('id', `${currUser.user_id}`)
+          .single()
+        if(e) {
+          throw e
+        }
+        user.setUser(userInfo) // sets all variables
+        onSuccess();
+        router.push('/profile');
+
+      }
+
+    } catch (error) {
+      console.error("Login error", error);
+    }
+  }
+
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
-      await login(data.username, data.password);
+      // await login(data.username, data.password);
       const {data: userCred, error: err} = await supabase
         .from('credentials')
         .select<any, User>()
@@ -40,20 +74,23 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
       if (err){ 
         throw new Error("Username does not exist")
       }
-
-      const userID = userCred.user_id
-      const {data: userInfo, error: e} = await supabase
-        .from("customers")
-        .select<any, Customer>()
-        .eq('id', `${userID}`)
-        .single()
-      if(e) {
-        throw e
+      const passwordIsValid = bcrypt.compareSync(data.password, userCred.password)
+  
+      if(passwordIsValid) {
+        const currUser = userCred
+        const {data: userInfo, error: e} = await supabase
+          .from("customers")
+          .select<any, Customer>()
+          .eq('id', `${currUser.user_id}`)
+          .single()
+        if(e) {
+          throw e
+        }
+        user.setUser(userInfo) // sets all variables
+        onSuccess();
+        router.push('/profile');
       }
 
-      user.setUser(userInfo) // sets all variables
-      onSuccess();
-      router.push('/profile');
     } catch (error) {
       console.error("Login error", error);
     }

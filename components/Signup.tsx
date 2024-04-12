@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { signup } from "@/lib";
 import { supabase } from "@/utils/supabase/server";
 import { User, Customer } from "@/types";
+import bcrypt from 'bcryptjs'
+
 
 interface SignupInput {
   username: string;
@@ -26,20 +28,40 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
   const user = useUser();
   const router = useRouter();
 
+  const passwordCreation = async (username: string, password: string) => {
+    try {
+      // Hash the password
+      const saltRounds = 10;
+      const hash = bcrypt.hashSync(password, saltRounds);
+  
+      // Insert user credentials into the database
+      const { error } = await supabase.from("credentials").insert([{ username, password: hash }]);
+      if (error) throw error;
+  
+      console.log("Username and Password Inserted Successfully");
+  
+      // await login(username, password);
+    } catch (error) {
+      console.error("Sign up error", error);
+      // Handle any errors that occur during the signup process
+    }
+  }
+
   const onSubmit: SubmitHandler<SignupInput> = async (data) => {
     try {
-        await signup(data.username, data.password)
+        await passwordCreation(data.username, data.password) //creates and stores the passwod
+          .catch(console.error)
+
         const {data: userCred, error: err} = await supabase
           .from('credentials')
           .select<any, User>('user_id')
           .eq(`username`, `${data.username}`)
           .single()
+
         if (err){ 
           throw new Error("Username does not exist")
         }
         
-
-        //TODO: need to add all variables to user vaiable
 
         user.setUserNumber(userCred.user_id)
         user.setUserID(data.username);
