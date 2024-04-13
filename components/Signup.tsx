@@ -25,10 +25,12 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
   }
   const { register, handleSubmit, watch, formState: { errors }, } = useForm<SignupInput>();
   const user = useUser();
+  const { setLoggedIn } = useUser();
   const router = useRouter();
 
   const passwordCreation = async (username: string, password: string) => {
     try {
+
       // Hash the password
       const saltRounds = 10;
       const hash = bcrypt.hashSync(password, saltRounds);
@@ -38,7 +40,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
       if (error) throw error;
   
       console.log("Username and Password Inserted Successfully");
-  
+      setLoggedIn(true);
       // await login(username, password);
     } catch (error) {
       console.error("Sign up error", error);
@@ -48,12 +50,13 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
 
   const onSubmit: SubmitHandler<SignupInput> = async (data) => {
     try {
+        
         await passwordCreation(data.username, data.password) //creates and stores the passwod
           .catch(console.error)
         const {data: userCred, error: err} = await supabase
           .from('credentials')
           .select<any, User>('user_id')
-          .eq(`username`, `valerio`)
+          .eq(`username`, data.username)
           .single()
 
         if (err){ 

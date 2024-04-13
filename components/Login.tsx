@@ -35,7 +35,7 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
       const {data: userCred, error: err} = await supabase
         .from('credentials')
         .select<any, User>()
-        .eq(`username`, `valerio`)
+        .eq(`username`, data.username)
         .single()
 
       if (err){ 
@@ -44,11 +44,10 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
       const passwordIsValid = bcrypt.compareSync(data.password, userCred.password)
     //TODO: REMOVE HARDCODED VALUES
       if(passwordIsValid) {
-        const currUser = userCred
         const {data: userInfo, error: e} = await supabase
           .from("customers")
           .select<any, Customer>()
-          .eq('id', `2`)
+          .eq('id', userCred.user_id)
           .single()
         if(e) {
           throw e

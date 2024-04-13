@@ -37,7 +37,7 @@ export default function QuotesTable({ quotes }: { quotes: Quote[] }) {
           <TableRow key={quote.id} onClick={() => toggleModal(quote)} className='hover:bg-gray-100 cursor-pointer'>
             <TableCell>{quote.date_created}</TableCell>
             <TableCell>
-              <Text>{quote.gallons_req.toString()}</Text>  // Convert number to string for display
+              <Text>{quote.gallons_req.toString()}</Text>
             </TableCell>
             <TableCell>
               <Text>{quote.sug_price}</Text>

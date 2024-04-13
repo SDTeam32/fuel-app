@@ -14,13 +14,14 @@ function isActive(route: string) {
 export default function Navigation() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false); // State to control SignUp component visibility
-  const { isLoggedIn, setLoggedIn } = useUser(); // Use isLoggedIn state from useUser hook
+  const { isLoggedIn, setLoggedIn, logoutUser } = useUser(); // Use isLoggedIn state from useUser hook
   const router = useRouter()
   
   const handleLogout = async () => {
     setLoggedIn(false); // Update isLoggedIn using setLoggedIn from useUser hook
     setShowLogin(false);
     setShowSignUp(false);
+    logoutUser();
     router.push('/');
   };
 

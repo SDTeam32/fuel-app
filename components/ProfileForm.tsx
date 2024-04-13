@@ -38,7 +38,7 @@ export default function SignUp() {
   }, []);
 
 
-  const onSubmit: SubmitHandler<ProfileInfo> = (data) => {
+  const onSubmit: SubmitHandler<ProfileInfo> = async (data) => {
     // Save profile information using the useUser hook
     user.setUserName(data.name);
     user.setUserAddress1(data.address1)
@@ -46,7 +46,24 @@ export default function SignUp() {
     user.setUserCity(data.city)
     user.setUserState(data.state)
     user.setUserZip(data.zip)
+    
+    // Insert profile information into the "customers" table
+    const { data: insertedUserInfo, error: insertErr } = await supabase
+      .from('customers')
+      .insert([{ 
+        name: data.name,
+        address1: data.address1,
+        address2: data.address2,
+        city: data.city,
+        state: data.state,
+        zip: data.zip,
+        id: user.userNumber
+      }])
 
+    // If there's an error during insertion, throw the error
+    if (insertErr) {
+      throw insertErr;
+    }
     
     // Redirect to the profile page
     router.push('/profile');

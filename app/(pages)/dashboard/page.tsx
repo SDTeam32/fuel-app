@@ -24,7 +24,7 @@ export default function Dashboard() {
     
     const getQuotes = useCallback(async () => {
         //TODO: REMOVE HARDCODED VALUE
-        const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", `2`) 
+        const {data, error} = await supabase.from("quote").select<any, Quote>().eq("user_id", user.userNumber) 
         if(error) {
             throw error
         }
@@ -78,7 +78,7 @@ export default function Dashboard() {
                 <div className='flex justify-between'>
                     <div>
                             <Title>Quotes</Title>
-                            <Text>A list of Quotes retrieved from Supabase. (not connected yet)</Text>
+                            
                             {/* <Search /> implement later*/}
                         </div>
                         <div className='flex justify-end items-end	' style={{marginLeft:"8.8rem"}}>
