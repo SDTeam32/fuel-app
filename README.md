@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Run unit tests with 'npm run test:coverage'
 
-![tests - Copy](https://github.com/SDTeam32/fuel-app/assets/110220969/345d2437-aeaa-4be2-b133-44a6d375ef15)
+![image](https://github.com/SDTeam32/fuel-app/assets/110220969/c706bc55-7fb2-44f7-9485-db286a8def7f)
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
