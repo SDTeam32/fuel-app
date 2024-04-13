@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from 'next/navigation'
 import Login from "./Login";
 import SignUp from "./Signup"; // Import the SignUp component
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "../hooks/useUser";
 
 function isActive(route: string) {
   const pathname = usePathname()

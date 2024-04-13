@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
-import { supabase } from "@/utils/supabase/server";
-import { State } from "@/types";
+import { supabase } from "../utils/supabase/server";
+import { State } from "../types";
 
 interface ProfileInfo {
   name: string;
