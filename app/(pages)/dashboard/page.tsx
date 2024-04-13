@@ -19,7 +19,7 @@ const date = new Date().toLocaleDateString('en-US', {
 export default function Dashboard() {
 
     const [showQuote, setShowQuote] = useState(false)
-    const [quotes, setQuotes] = useState<Quote[]>([{id:0,user_id:0, date_created: date, gallons_req: 64, sug_price: 2.42, total_price:232}]);
+    const [quotes, setQuotes] = useState<Quote[]>([]);
     const user = useUser()
     
     const getQuotes = useCallback(async () => {
@@ -29,7 +29,7 @@ export default function Dashboard() {
             throw error
         }
 
-        setQuotes(prevQuotes => [...prevQuotes, ...data ])
+        setQuotes([...data ])
     }, [])
 
     useEffect(()=> {
