@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from 'next/navigation'
-import { supabase } from "@/utils/supabase/server";
-import { useUser } from "@/hooks/useUser";
-import { Customer, User } from "@/types";
+import { supabase } from "../utils/supabase/server";
+import { useUser } from "../hooks/useUser";
+import { Customer, User } from "../types";
 import bcrypt from 'bcryptjs'
 
 
@@ -24,42 +24,11 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
     return null;
   }
   const { register, handleSubmit, watch, formState: { errors }, } = useForm<LoginInput>();
-  const router = useRouter()
   const [errorMessage] = useState<string>('');
+  const router = useRouter()
   const user = useUser()
 
-  const loginUser = async (username:string, password:string) => {
-    try {
-      const { data: userData, error: userError } = await supabase
-        .from('credentials')
-        .select()
-        .eq('username', username)
-        .single<User>();
-      if (userError){ 
-        throw new Error("Username does not exist")
-      }
-      const passwordIsValid = bcrypt.compareSync(password, userData.password)
-  
-      if(passwordIsValid) {
-        const currUser = userData
-        const {data: userInfo, error: e} = await supabase
-          .from("customers")
-          .select<any, Customer>()
-          .eq('id', `${currUser.user_id}`)
-          .single()
-        if(e) {
-          throw e
-        }
-        user.setUser(userInfo) // sets all variables
-        onSuccess();
-        router.push('/profile');
 
-      }
-
-    } catch (error) {
-      console.error("Login error", error);
-    }
-  }
 
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
@@ -129,6 +98,7 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                       errors.username ? 'border-red-500' : ''
                     }`}
+                    data-testid="username"
                     id="username"
                     type="text"
                     placeholder="Username"
@@ -149,6 +119,7 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                       errors.password ? 'border-red-500' : ''
                     }`}
+                    data-testid="password"
                     id="password"
                     type="password"
                     placeholder="Password"

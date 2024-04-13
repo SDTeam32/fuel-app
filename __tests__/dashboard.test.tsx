@@ -1,24 +1,81 @@
 import Dashboard from "../app/(pages)/dashboard/page";
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor , act, findByText} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { useRouter } from "next/navigation";
+import { supabase } from "../utils/supabase/server";
 
-jest.mock("next/navigation", () => ({
-    useRouter: jest.fn().mockReturnValue({
-      push: jest.fn()
-    })
-  }));
+// This is your mock from the setup file
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn()
+}));
+const mockPush = jest.fn();
+(useRouter as jest.Mock).mockReturnValue({
+  push: mockPush
+});
+
+jest.mock('../utils/supabase/server', () => {
+    const mockQuery = jest.fn(() => ({
+      select: jest.fn().mockReturnThis(),
+      eq: jest.fn().mockResolvedValue({data: [{
+        id:0,
+        user_id:0, 
+        date_created: "04/03/2024",
+         gallons_req: 64, 
+        sug_price: 2.42, 
+        total_price:232}], error: null}),
+      single: jest.fn().mockResolvedValue({data: [{
+        id:0,
+        user_id:0, 
+        date_created: "04/03/2024",
+         gallons_req: 64, 
+        sug_price: 2.42, 
+        total_price:232}], error: null}),
+      insert: jest.fn().mockResolvedValue({ error: null })
+    }));
+  
+    return {
+      __esModule: true,
+      supabase: {
+        from: mockQuery
+      }
+    };
+  });
+
 
 describe('Dashboard', () => {
+  const mockQuotes = [
+    { id: 0, user_id: 0, date_created: '2021-01-01', gallons_req: 64, sug_price: 2.42, total_price: 231 },
+  ];
+
   test('renders the main UI components', () => {
-    process.env.NEXT_PUBLIC_SUPABASE_URL='https://figgdmjjimoaiwlbtekw.supabase.co/';
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpZ2dkbWpqaW1vYWl3bGJ0ZWt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxNjE1MTIsImV4cCI6MjAyMjczNzUxMn0.1egRR2QeqBOZBCw33yVWHYotnnmcZAlMxmcODzKeAII';
     render(<Dashboard />);
     
     expect(screen.getByText('Quotes')).toBeInTheDocument();
     expect(screen.getByText('A list of Quotes retrieved from Supabase. (not connected yet)')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /new quote/i })).toBeInTheDocument();
   });
+  it('should get the quotes :)', async () => {
+    await act(async () => {
+      render(<Dashboard />);
+      await waitFor(() => {
+        expect(supabase.from).toHaveBeenCalledWith("quote");
+      });
+    });
+    // expect(getByText("64")).toBeInTheDocument()
+  })
+  it('handles new Quotes',async () => {
+    const { getByTestId, getByText, findByText } = render(<Dashboard/>);
+    fireEvent.click(getByTestId("newquote"))
+    fireEvent.change(getByTestId("gallons_req"), { target: { value: 32 } })
+    fireEvent.change(getByTestId("date"), { target: { value: '4/14/24' } })
+    fireEvent.click(getByText("Submit"))
+
+    await act(async () => {
+      await findByText("04/12/2024")
+    })
+
+  })
 
   // test('toggles the quote modal on button click', async () => {
   //   render(<Dashboard />);

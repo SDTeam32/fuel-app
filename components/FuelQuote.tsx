@@ -33,28 +33,38 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="wd-80 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
+        <form onSubmit={handleSubmit(onSubmit)} className=" wd-80 shadow-md rounded px-8 pt-6 pb-8 mb-4" data-testid="form">
             <div className="mb-4">
-                <label htmlFor="gallons_req" className="block text-gray-700 text-sm font-bold mb-2">Gallons Requested</label>
-                <input {...register("gallons_req", { required: "Please Fill Gallons Requested" })}
-                    id="gallons_req" type="number" placeholder="Gallons requested"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                {errors.gallons_req && <p className="text-red-500 text-xs italic">{errors.gallons_req.message}</p>}
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gallonsReq">
+                Gallons Requested
+                </label>
+                <input {...register("gallons_req",{required: "Please Fill Gallons Requested"})} 
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                    id="gallonsReq" type="number" placeholder="Gallons requested"
+                    data-testid="gallons_req"/>
+                {errors.gallons_req && <p className="text-red-500 text-xs italic">{errors.gallons_req?.message}</p>}
+
             </div>
             <div className="mb-6">
                 <label htmlFor="delivery_addr" className="block text-gray-700 text-sm font-bold mb-2">Delivery Address</label>
                 {fakeAddress}
             </div>
             <div className="mb-6">
-                <label htmlFor="delivery_date" className="block text-gray-700 text-sm font-bold mb-2">Delivery Date</label>
-                <input {...register("delivery_date", {
-                    required: "Please Fill Date",
-                    validate: {
-                        isFutureDate: (value: any) => new Date(value) > new Date() || "Date must be in the future"
-                    }
-                })}
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="delivery_addr">
+                Delivery Date
+                </label>
+                <input
+                    {...register("delivery_date", {
+                        required: "Please Fill Date",
+                        validate: {
+                          isFutureDate: (value:any) => new Date(value) > new Date() || "Date must be in the future"
+                        }
+                      })}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
                     id="delivery_addr" type="date"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" />
+                    data-testid="date" />
+
                 {errors.delivery_date && <p className="text-red-500 text-xs italic">{errors.delivery_date.message}</p>}
             </div>
             <br />

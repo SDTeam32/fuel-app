@@ -2,8 +2,8 @@ import React, { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/navigation';
-import { supabase } from "@/utils/supabase/server";
-import { User, Customer } from "@/types";
+import { supabase } from "../utils/supabase/server";
+import { User, Customer } from "../types";
 import bcrypt from 'bcryptjs'
 
 
@@ -50,7 +50,6 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
     try {
         await passwordCreation(data.username, data.password) //creates and stores the passwod
           .catch(console.error)
-
         const {data: userCred, error: err} = await supabase
           .from('credentials')
           .select<any, User>('user_id')
@@ -105,6 +104,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
                         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                           errors.username ? "border-red-500" : ""
                         }`}
+                        data-testid="username"
                         id="username"
                         type="text"
                         placeholder="Username"
@@ -132,6 +132,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
                         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                           errors.password ? "border-red-500" : ""
                         }`}
+                      data-testid="password"
                         id="password"
                         type="password"
                         placeholder="Password"
@@ -166,6 +167,7 @@ export default function SignUp({ show, onClose, onSuccess }:ModalProps) {
                         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                           errors.password2 ? "border-red-500" : ""
                         }`}
+                        data-testid="password2"
                         id="password2"
                         type="password"
                         placeholder="Confirm Password"
