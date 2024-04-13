@@ -52,7 +52,8 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                 </label>
                 <input {...register("gallons_req",{required: "Please Fill Gallons Requested"})} 
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="gallons_req" type="number" placeholder="Gallons requested"/>
+                    id="gallons_req" type="number" placeholder="Gallons requested"
+                    data-testid="gallons_req"/>
                 {errors.gallons_req && <p className="text-red-500 text-xs italic">{errors.gallons_req?.message}</p>}
             </div>
             <div className="mb-6">
@@ -74,7 +75,8 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
                         }
                       })}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
-                    id="delivery_addr" type="date" />
+                    id="delivery_addr" type="date"
+                    data-testid="date" />
                 {errors.delivery_date && <p className="text-red-500 text-xs italic">{errors.delivery_date.message}</p>}
             </div> <br/>
             <label className="block text-gray-700 text-sm font-bold mb-2"> Suggested Price  </label>

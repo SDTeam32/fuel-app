@@ -54,6 +54,7 @@ export default function SignUp() {
 
   return (
     <form
+      data-testid="profileform"
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-md shadow-md rounded px-8 pt-6 pb-8 mb-4"
     >
@@ -70,6 +71,7 @@ export default function SignUp() {
           id="name"
           type="text"
           placeholder="Full Name"
+          data-testid="name"
         />
         {errors.name && (
   <p className="text-red-500 text-xs italic">
@@ -94,6 +96,7 @@ export default function SignUp() {
           id="address1"
           type="text"
           placeholder="Address 1"
+          data-testid="address1"
         />
         {errors.address1 && (
   <p className="text-red-500 text-xs italic">
@@ -142,6 +145,7 @@ export default function SignUp() {
           id="city"
           type="text"
           placeholder="City"
+          data-testid="city"
         />
         {errors.city && (
   <p className="text-red-500 text-xs italic">
@@ -166,6 +170,7 @@ export default function SignUp() {
             {...register("state", { required: true })}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="state"
+            data-testid="state"
           >
             <option value="">Select State</option>
             {states.map((state) => (
@@ -190,6 +195,7 @@ export default function SignUp() {
             id="zip"
             type="text"
             placeholder="ZIP"
+            data-testid="zip"
           />
           {errors.zip && (
     <p className="text-red-500 text-xs italic">
