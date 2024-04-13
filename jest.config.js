@@ -27,7 +27,8 @@ module.exports = {
       '!**/postcss.config.js',
       '!**/tailwind.config.ts',
       '!**/_app.tsx', // Exclude _app file from Next.js (if you want)
-      '!**/_document.tsx', // Exclude _document file from Next.js (if you want)
+      '!**/_document.tsx',
+      '!**/useUser.ts', // Exclude _document file from Next.js (if you want)
       // Add other exclusions as needed
     ],
     coverageDirectory: 'coverage', // Output directory for coverage reports
