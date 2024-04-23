@@ -18,8 +18,8 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
   } = useForm<Quote>();
 
   const user = useUser();
-
-  const fakeAddress: string = `${user.userAddress1}, ${user.userCity}, ${user.userZip}, ${user.userState}`;
+  const additionalAddress = user.userAddress2 ? ` ${user.userAddress2}` : '';
+  const fakeAddress: string = `${user.userAddress1} ${additionalAddress}, ${user.userCity}, ${user.userZip}, ${user.userState}`;
   const suggestedPrice: number = 1.5;
   const gallonsRequested = watch("gallons_req", 0);
   const [totalPrice, setTotalPrice] = useState(0);
