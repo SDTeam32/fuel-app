@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect } from "react";
+import {useState, useEffect } from "react";
 import { Quote } from "../types";
 
 interface FuelQuoteProps {
@@ -7,10 +7,14 @@ interface FuelQuoteProps {
 }
 
 export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<Quote>();
+    const { register, handleSubmit, watch, setValue, formState: { errors, isValid } } = useForm<Quote>({
+        mode: 'onChange'
+    });
+    const [showButton, setShowButton] = useState(false)
     const fakeAddress = "123 Main St, 77032 Houston TX";
     const suggestedPrice = 2.42;
     const gallonsRequested = watch("gallons_req", 0);
+    const delDate = watch('delivery_date');
 
     useEffect(() => {
         setValue('delivery_addr', fakeAddress);
@@ -23,18 +27,23 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
 
     const totalPrice = calculateTotalPrice(gallonsRequested);
 
-    const onSubmit: SubmitHandler<Quote> = (data: Quote) => {
+    const onSubmit = () => {
+        //this function calls the pricing module
+        
+
+        setShowButton(true) //makes the getQuote button show
+    };
+    
+    const getQuoteButton: SubmitHandler<Quote> = (data: Quote) => {
         data.gallons_req = Number(data.gallons_req);
         data.sug_price = suggestedPrice;
         data.total_price = totalPrice;
-
-        sendQuote(data);
-        console.log(data);
-    };
+        sendQuote(data)
+    }
 
     return (
 
-        <form onSubmit={handleSubmit(onSubmit)} className=" wd-80 shadow-md rounded px-8 pt-6 pb-8 mb-4" data-testid="form">
+        <form onSubmit={handleSubmit(getQuoteButton)} className=" wd-80 shadow-md rounded px-8 pt-6 pb-8 mb-4" data-testid="form">
             <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gallonsReq">
                 Gallons Requested
@@ -73,9 +82,20 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
             <label className="block text-gray-700 text-sm font-bold mb-2">Total Price</label>
             <span className="text-black">{totalPrice}</span>
             <div className="flex justify-center">
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Submit
-                </button>
+                {delDate && 
+                 gallonsRequested && 
+                    <button 
+                        onClick={()=>onSubmit()}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Submit
+                    </button>
+                }
+                {showButton && 
+                    <button 
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Get Quote
+                </button>}
             </div>
         </form>
     );
