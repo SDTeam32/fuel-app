@@ -7,8 +7,7 @@ import { Card, Title, Text, Button } from '@tremor/react';
 import { Quote, QuoteInput } from '../../../types';
 import { useUser } from '../../../hooks/useUser';
 import { supabase } from '../../../utils/supabase/server';
-import Image from "next/image";
-
+import Navigation from '@/components/Navigation';
 
 
 const date = new Date().toLocaleDateString('en-US', {
@@ -74,31 +73,7 @@ export default function Dashboard() {
     
     return (
         <>
-        <div
-      className="relative block group"
-      style={{
-        display: "block",
-        width: "100vw",
-        minHeight: "100vh", // Ensure the page is at least as tall as the viewport
-        overflow: "hidden",
-        position: "relative" // Ensure the container has relative positioning
-      }}
-    >
-      {/* Background overlay */}
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-black opacity-50"
-        style={{ zIndex: -1 }} // Ensure the overlay is behind the image
-      />
-    
-      {/* Image */}
-      <div className="absolute top-0 left-0 w-full h-full" style={{ zIndex: -2 }}>
-        <Image
-          src="/images/background.jpg"
-          layout="fill"
-          objectFit="cover"
-          alt="Background Image"
-        />
-      </div>
+        
             <main className="px-4 md:p-10 mx-auto max-w-7xl bg-gray-50 pt-10">
                 <div className='flex justify-between'>
                     <div>
@@ -127,7 +102,6 @@ export default function Dashboard() {
                     <FuelQuote sendQuote={handleQuoteSubmission} />
                 </Modal>
             </main>
-            </div>
         </>
     )
 };

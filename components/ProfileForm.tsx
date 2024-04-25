@@ -207,7 +207,7 @@ export default function SignUp() {
             ZIP <span className="text-red-500">*</span>
           </label>
           <input
-            {...register("zip", { required: true, maxLength: 9, minLength: 5, pattern: /^\d+$/, })}
+            {...register("zip", { required: true, maxLength: 9, minLength: 5 })}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="zip"
             type="text"
@@ -220,8 +220,6 @@ export default function SignUp() {
         ? "Required."
         : errors.zip.type === "maxLength"
         ? "At most 9 characters."
-        : errors.zip.type === "pattern"
-        ? "Invalid ZIP code."
         : "At least 5 characters."
       }
     </p>
