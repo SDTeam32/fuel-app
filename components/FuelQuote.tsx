@@ -11,6 +11,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
     const fakeAddress = "123 Main St, 77032 Houston TX";
     const suggestedPrice = 2.42;
     const gallonsRequested = watch("gallons_req", 0);
+    const dateRequested= watch('delivery_date');
 
     useEffect(() => {
         setValue('delivery_addr', fakeAddress);
@@ -73,9 +74,28 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
             <label className="block text-gray-700 text-sm font-bold mb-2">Total Price</label>
             <span className="text-black">{totalPrice}</span>
             <div className="flex justify-center">
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Submit
-                </button>
+            {gallonsRequested && dateRequested && (
+     <>
+           
+    </>
+)   }{gallonsRequested && dateRequested && (
+    <>
+        <button 
+            type="button"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            onClick={() => window.open('URL_TO_OPEN', '_blank')}
+            style={{ marginRight: '10px' }}  // Adds margin to the right of the "Get Quote" button
+        >
+            Get Quote
+        </button>
+        <button 
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+            Submit
+        </button>
+    </>
+)}
             </div>
         </form>
     );
