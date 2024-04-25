@@ -22,6 +22,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
   const fakeAddress: string = `${user.userAddress1} ${additionalAddress}, ${user.userCity}, ${user.userZip}, ${user.userState}`;
   const suggestedPrice: number = 1.5;
   const gallonsRequested = watch("gallons_req", 0);
+  const dateRequested= watch('delivery_date');
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     // Set the default value for deliveryAddr on component mount
@@ -96,14 +97,29 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
       <label className="block text-gray-700 text-sm font-bold mb-2"> Total Price </label>
       <span className="text-black">{totalPrice}</span>
       <div className="flex justify-center">
-        <button onClick={getQuote} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Get Quote
+
+        {gallonsRequested && dateRequested && (
+     <>
+           
+    </>
+)   }{gallonsRequested && dateRequested && (
+    <>
+        <button 
+            type="button"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            onClick={() => getQuote()}
+            style={{ marginRight: '10px' }}  // Adds margin to the right of the "Get Quote" button
+        >
+            Get Quote
         </button>
-      </div>
-      <div className="flex justify-center">
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Submit
+        <button 
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+            Submit
         </button>
+    </>
+)}
       </div>
     </form>
   );
