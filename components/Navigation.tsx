@@ -14,14 +14,14 @@ function isActive(route: string) {
 export default function Navigation() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false); // State to control SignUp component visibility
-  const { isLoggedIn, setLoggedIn, logoutUser } = useUser(); // Use isLoggedIn state from useUser hook
+  const user = useUser(); // Use isLoggedIn state from useUser hook
   const router = useRouter()
   
   const handleLogout = async () => {
-    setLoggedIn(false); // Update isLoggedIn using setLoggedIn from useUser hook
+    user.setLoggedIn(false); // Update isLoggedIn using setLoggedIn from useUser hook
     setShowLogin(false);
     setShowSignUp(false);
-    logoutUser();
+    user.logoutUser();
     router.push('/');
   };
 
@@ -34,12 +34,12 @@ export default function Navigation() {
   };
 
   const handleProfileClick = () => {
-    if(isLoggedIn)
+    if(user.isLoggedIn)
       router.push('/profile');
   };
 
   const handleDashboardClick = () => {
-    if(isLoggedIn)
+    if(user.isLoggedIn)
       router.push('/dashboard');
   };
 
@@ -56,7 +56,7 @@ export default function Navigation() {
         </Link>
         <div className="flex order-2  space-x-0 rtl:space-x-reverse">
           {/* Conditional rendering for SignUp, Login, and Logout buttons */}
-          {!isLoggedIn && (
+          {!user.isLoggedIn && (
             <>
               <button
                 onClick={handleSignUpClick} // Show SignUp component on click
@@ -74,7 +74,7 @@ export default function Navigation() {
               </button>
             </>
           )}
-          {isLoggedIn && (
+          {user.isLoggedIn && (
             <button
               onClick={handleLogout}
               type="button"
@@ -84,8 +84,8 @@ export default function Navigation() {
             </button>
           )}
           {/* Conditional rendering for SignUp and Login components */}
-          {showLogin && <Login show={showLogin} onClose={() => setShowLogin(false)} onSuccess={() => {setShowLogin(false); setLoggedIn(true);}}/>}
-          {showSignUp && <SignUp show={showSignUp} onClose={() => setShowSignUp(false)} onSuccess={() => {setShowSignUp(false); setLoggedIn(true);}}/>}
+          {showLogin && <Login show={showLogin} onClose={() => setShowLogin(false)} onSuccess={() => {setShowLogin(false); user.setLoggedIn(true);}}/>}
+          {showSignUp && <SignUp show={showSignUp} onClose={() => setShowSignUp(false)} onSuccess={() => {setShowSignUp(false); user.setLoggedIn(true);}}/>}
         </div>
         
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">

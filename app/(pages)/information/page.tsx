@@ -1,9 +1,9 @@
 "use client"
 import Image from "next/image";
 import ProfileForm from "../../../components/ProfileForm";
+import { useUser } from "@/hooks/useUser";
 
 export default function Information() {
-  
   return (
     <div
       className="relative block group"

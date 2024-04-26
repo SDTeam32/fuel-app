@@ -93,7 +93,7 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
                     Username<span className="text-red-500">*</span>
                   </label>
                   <input
-                    {...register("username", { required: true })}
+                    {...register("username", { required: true, maxLength: 20, minLength: 3 })}
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                       errors.username ? 'border-red-500' : ''
                     }`}
@@ -103,7 +103,14 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
                     placeholder="Username"
                   />
                   {errors.username && (
-                    <p className="text-red-500 text-xs italic">Required.</p>
+                    <p className="text-red-500 text-xs italic">
+                      {errors.username.type === "required"
+                          ? "Required."
+                          : errors.username.type === "maxLength"
+                          ? "At most 20 characters."
+                          : "At least 3 characters."
+                        }
+                    </p>
                   )}
                 </div>
                 <div className="mb-4">
@@ -114,7 +121,7 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
                     Password<span className="text-red-500">*</span>
                   </label>
                   <input
-                    {...register("password", { required: true })}
+                    {...register("password", { required: true, minLength: 8,  maxLength: 50 })}
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                       errors.password ? 'border-red-500' : ''
                     }`}
@@ -124,7 +131,14 @@ export default function Login({ show, onClose, onSuccess }:ModalProps) {
                     placeholder="Password"
                   />
                   {errors.password && (
-                    <p className="text-red-500 text-xs italic">Required.</p>
+                    <p className="text-red-500 text-xs italic">
+                      {errors.password.type === "required"
+                          ? "Required."
+                          : errors.password.type === "maxLength"
+                          ? "At most 50 characters."
+                          : "At least 8 characters."
+                        }
+                    </p>
                   )}
                 </div>
                 {errorMessage && (
