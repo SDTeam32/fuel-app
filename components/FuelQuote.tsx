@@ -2,8 +2,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Quote, QuoteInput } from "../types";
-import { useUser } from "@/hooks/useUser";
-import { supabase } from "@/utils/supabase/server";
+import { useUser } from "../hooks/useUser";
+import { supabase } from "../utils/supabase/server";
 interface FuelQuoteProps {
   sendQuote: (data: Quote) => void;
 }

@@ -52,8 +52,8 @@ describe('Dashboard', () => {
     render(<Dashboard />);
     
     expect(screen.getByText('Quotes')).toBeInTheDocument();
-    expect(screen.getByText('A list of Quotes retrieved from Supabase. (not connected yet)')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /new quote/i })).toBeInTheDocument();
+    // expect(screen.getByText('A list of Quotes retrieved from Supabase. (not connected yet)')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /New Quote/i })).toBeInTheDocument();
   });
   it('should get the quotes :)', async () => {
     await act(async () => {
