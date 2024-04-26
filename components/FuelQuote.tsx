@@ -24,7 +24,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
   const gallonsRequested = watch("gallons_req", 0);
   const dateRequested= watch('delivery_date');
   const [totalPrice, setTotalPrice] = useState(0);
-  
+  const [showButton, setShowButton] = useState(false);
   useEffect(() => {
     // Set the default value for deliveryAddr on component mount
     setValue("delivery_addr", fakeAddress);
@@ -47,6 +47,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
   const getQuote = async () => {
     const newTotalPrice = await calculateTotalPrice(gallonsRequested);
     setTotalPrice(newTotalPrice); // Set state to trigger re-render
+    setShowButton(true);
   };
 
   const onSubmit: SubmitHandler<Quote> = (data: Quote) => {
@@ -55,7 +56,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
     data.total_price = totalPrice;
 
     sendQuote(data);
-    console.log(data);
+    // console.log(data);
   };
 
   return (
@@ -113,12 +114,12 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
         >
             Get Quote
         </button>
-        <button 
+        {showButton && <button 
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
             Submit
-        </button>
+        </button>}
     </>
 )}
       </div>
