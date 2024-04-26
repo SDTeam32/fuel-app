@@ -1,53 +1,82 @@
-import { render, screen } from '@testing-library/react';
-import RootLayout from '../app/layout';
-import '@testing-library/jest-dom';
-import { ReactNode } from 'react';
+import { render, screen } from "@testing-library/react";
+import RootLayout from "../app/layout";
+import { useRouter } from "next/navigation";
+import { useUser } from "../hooks/useUser";
+import { usePathname } from "next/navigation";
+import { ReactNode } from "react";
 
-
-jest.mock('next/font/google', () => ({
-   Inter: () => ({ className: "mocked-class-name" })
- }));
-
-
-jest.mock('next/navigation', () => ({
- usePathname: jest.fn(),
+// All mocks at the top
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+  usePathname: jest.fn(),
 }));
 
+jest.mock("../hooks/useUser", () => ({
+  useUser: jest.fn(),
+}));
 
-jest.mock('@/components/Navigation', () => {
- return function DummyNavigation() {
-   return <div>Navigation</div>;
- };
+jest.mock("next/font/google", () => ({
+  Inter: () => ({ className: "mocked-class-name" }),
+}));
+
+jest.mock("../components/Navigation", () => {
+  return function DummyNavigation() {
+    return <div>Navigation</div>;
+  };
 });
 
-
-jest.mock('@/components/HydrationZustand', () => {
- return function DummyHydrationZustand({ children }: { children: ReactNode }) {
-   return <div>{children}</div>;
- };
+jest.mock("../components/HydrationZustand", () => {
+  return function DummyHydrationZustand({ children }: { children: ReactNode }) {
+    return <div>{children}</div>;
+  };
 });
 
+describe("RootLayout", () => {
+  const mockRouterPush = jest.fn();
+  const mockUser = { isLoggedIn: true };
 
-describe('RootLayout', () => {
- const mockUsePathname = require('next/navigation').usePathname;
+  beforeEach(() => {
+    (useUser as unknown as jest.Mock).mockReturnValue(mockUser);
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockRouterPush,
+    });
+  });
 
+  it("should render Navigation when not on the information page", () => {
+    (usePathname as jest.Mock).mockReturnValue("/some-other-page");
 
- it('does not render Navigation on the information page', () => {
-   mockUsePathname.mockReturnValue('/information');
-   render(<RootLayout><div>Test Child</div></RootLayout>);
-   expect(screen.queryByText('Navigation')).toBeNull();
- });
+    render(
+      <RootLayout>
+        <div>Child Content</div>
+      </RootLayout>
+    );
 
+    expect(screen.getByText(/child content/i)).toBeInTheDocument();
+    expect(screen.getByText(/Navigation/i)).toBeInTheDocument();
+  });
 
- it('renders Navigation on other pages', () => {
-   mockUsePathname.mockReturnValue('/other-page');
-   render(<RootLayout><div>Test Child</div></RootLayout>);
-   expect(screen.getByText('Navigation')).toBeInTheDocument();
- });
+  it("should not render Navigation when on the information page", () => {
+    (usePathname as jest.Mock).mockReturnValue("/information");
 
+    render(
+      <RootLayout>
+        <div>Child Content</div>
+      </RootLayout>
+    );
 
- it('renders children correctly', () => {
-   render(<RootLayout><div>Test Child</div></RootLayout>);
-   expect(screen.getByText('Test Child')).toBeInTheDocument();
- });
+    expect(screen.getByText(/child content/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Navigation/i)).toBeNull();
+  });
+
+  it("should redirect to home if user is not logged in", () => {
+    (useUser as unknown as jest.Mock).mockReturnValue({ isLoggedIn: false });
+
+    render(
+      <RootLayout>
+        <div>Child Content</div>
+      </RootLayout>
+    );
+
+    expect(mockRouterPush).toHaveBeenCalledWith("/"); // Redirect to home if user is not logged in
+  });
 });

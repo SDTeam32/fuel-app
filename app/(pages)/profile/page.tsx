@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../../../hooks/useUser";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/server";
+import { supabase } from "../../../utils/supabase/server";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { State } from "../../../types";
 import { Card, Title } from "@tremor/react";
