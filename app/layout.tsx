@@ -1,11 +1,11 @@
 "use client"
-import Navigation from "@/components/Navigation";
+import Navigation from "../components/Navigation";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { usePathname, useRouter } from 'next/navigation'
-import HydrationZustand from '@/components/HydrationZustand'
+import HydrationZustand from '../components/HydrationZustand'
 import { useEffect } from "react";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "../hooks/useUser";
 
 
 const inter = Inter({ subsets: ["latin"] });
