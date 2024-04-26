@@ -24,6 +24,7 @@ export default function FuelQuote({ sendQuote }: FuelQuoteProps) {
   const gallonsRequested = watch("gallons_req", 0);
   const dateRequested= watch('delivery_date');
   const [totalPrice, setTotalPrice] = useState(0);
+  
   useEffect(() => {
     // Set the default value for deliveryAddr on component mount
     setValue("delivery_addr", fakeAddress);

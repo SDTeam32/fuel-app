@@ -21,6 +21,7 @@ interface ProfileInfo {
 
 export default function Profile() {
   const user = useUser();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -51,6 +52,16 @@ export default function Profile() {
       }
     }
     fetchStates();
+
+    const checkUser = async () => {
+      if (user.isLoggedIn && typeof user.userAddress1 === 'undefined') { // Check for undefined
+        // If userAddress1 is undefined, log out and redirect
+        await user.logoutUser(); // Assuming logoutUser is asynchronous
+        router.push('/'); // Redirect after logging out
+      }
+    };
+
+    checkUser(); // Call the asynchronous function to check user address
   }, []);
 
   const onSubmit: SubmitHandler<ProfileInfo> = async (insertData) => {
