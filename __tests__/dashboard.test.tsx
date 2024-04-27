@@ -1,9 +1,10 @@
 import Dashboard from "../app/(pages)/dashboard/page";
-import { fireEvent, render, screen, waitFor , act, findByText} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor , act, findByText, getByPlaceholderText} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { useRouter } from "next/navigation";
 import { supabase } from "../utils/supabase/server";
+import { useUser } from "../hooks/useUser";
 
 // This is your mock from the setup file
 jest.mock('next/navigation', () => ({
@@ -14,33 +15,61 @@ const mockPush = jest.fn();
   push: mockPush
 });
 
-jest.mock('../utils/supabase/server', () => {
-    const mockQuery = jest.fn(() => ({
-      select: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockResolvedValue({data: [{
-        id:0,
-        user_id:0, 
-        date_created: "04/03/2024",
-         gallons_req: 64, 
-        sug_price: 2.42, 
-        total_price:232}], error: null}),
-      single: jest.fn().mockResolvedValue({data: [{
-        id:0,
-        user_id:0, 
-        date_created: "04/03/2024",
-         gallons_req: 64, 
-        sug_price: 2.42, 
-        total_price:232}], error: null}),
-      insert: jest.fn().mockResolvedValue({ error: null })
-    }));
+// jest.mock('../hooks/useUser', () => ({
+
+// }))
+const mockSingle = jest.fn().mockResolvedValue({
+  data: [{
+    id:0,
+    user_id:32, 
+    date_created: "04/03/2024",
+    gallons_req: 64, 
+    sug_price: 2.42, 
+    total_price:232}],
+  error: 
+    null
+})
+
+// jest.mock('../utils/supabase/server', () => {
+//     const mockQuery = jest.fn(() => ({
+//       select: jest.fn().mockReturnThis(),
+//       eq: jest.fn().mockResolvedValue({data: [{
+//         id:0,
+//         user_id:0, 
+//         date_created: "04/03/2024",
+//          gallons_req: 64, 
+//         sug_price: 2.42, 
+//         total_price:232}], error: null}),
+//       single: mockSingle,
+//       insert: jest.fn().mockResolvedValue({ error: null })
+//     }));
   
-    return {
-      __esModule: true,
-      supabase: {
-        from: mockQuery
-      }
-    };
-  });
+//     return {
+//       __esModule: true,
+//       supabase: {
+//         from: mockQuery
+//       }
+//     };
+//   });
+jest.mock('../utils/supabase/server', () => ({
+  __esModule: true,
+  supabase: {
+    from: jest.fn().mockReturnThis(),
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({
+      data: [{
+        id:0,
+        user_id:32, 
+        date_created: "04/03/2024",
+        gallons_req: 64, 
+        sug_price: 2.42, 
+        total_price:232}],
+      error: 
+        null
+    }),
+  },
+}));
 
 
 describe('Dashboard', () => {
@@ -49,8 +78,11 @@ describe('Dashboard', () => {
   ];
 
   test('renders the main UI components', () => {
-    render(<Dashboard />);
+      /* fire events that update state */
+      render(<Dashboard />);
+
     
+
     expect(screen.getByText('Quotes')).toBeInTheDocument();
     // expect(screen.getByText('A list of Quotes retrieved from Supabase. (not connected yet)')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /New Quote/i })).toBeInTheDocument();
@@ -65,15 +97,52 @@ describe('Dashboard', () => {
     // expect(getByText("64")).toBeInTheDocument()
   })
   it('handles new Quotes',async () => {
-    const { getByTestId, getByText, findByText } = render(<Dashboard/>);
+    jest.mock('../utils/supabase/server', () => ({
+      __esModule: true,
+      supabase: {
+        from: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        single: jest.fn().mockResolvedValue({
+          data: [{
+            id:0,
+            user_id:32, 
+            date_created: "04/03/2024",
+            gallons_req: 64, 
+            sug_price: 2.42, 
+            total_price:232}],
+          error: 
+            null
+        }),
+      },
+    }));
+    const { getByTestId, getByText, findByText, getByPlaceholderText } = render(<Dashboard/>);
+    
     fireEvent.click(getByTestId("newquote"))
-    fireEvent.change(getByTestId("gallons_req"), { target: { value: 32 } })
-    fireEvent.change(getByTestId("date"), { target: { value: '4/14/24' } })
-    fireEvent.click(getByText("Submit"))
+    // fireEvent.change(get)
+    // const gallonsInpt = screen.getByTestId("gallons_req")
+    // userEvent.type(gallonsInpt, "12")
+    // const dateInpt = screen.getByTestId("date")
+    // userEvent.type(dateInpt, "10/12/24")
 
+
+    fireEvent.change(screen.getByTestId("gallons_req"), { target: { value: "32" } })
+    fireEvent.change(screen.getByTestId("date"), { target: { value: '10/12/2024' } })
+    // fireEvent.click(screen.getByText("Submit"))
     await act(async () => {
-      await findByText("04/12/2024")
-    })
+      // Interact with your component to trigger the async operation
+      fireEvent.click(screen.getByText('Get Quote'));
+  
+      // You can also resolve any promises inside the act block
+      // await getQuotes();
+  
+      // Now that the async operations are complete, the state should be updated
+      // You can perform assertions here or outside the act block
+    });
+
+    expect(screen.getByText("Submit")).toBeInTheDocument();
+
+
 
   })
 

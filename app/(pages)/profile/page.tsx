@@ -39,19 +39,270 @@ export default function Profile() {
 
   const [editMode, setEditMode] = useState(false);
 
-  const [states, setStates] = useState<State[]>([]);
+  // const [states, setStates] = useState<State[]>([]);
+  const states = [
+  {
+    "id": 1,
+    "state_name": "Alabama",
+    "state_abbreviation": "AL"
+  },
+  {
+    "id": 2,
+    "state_name": "Alaska",
+    "state_abbreviation": "AK"
+  },
+  {
+    "id": 3,
+    "state_name": "Arizona",
+    "state_abbreviation": "AZ"
+  },
+  {
+    "id": 4,
+    "state_name": "Arkansas",
+    "state_abbreviation": "AR"
+  },
+  {
+    "id": 5,
+    "state_name": "California",
+    "state_abbreviation": "CA"
+  },
+  {
+    "id": 6,
+    "state_name": "Colorado",
+    "state_abbreviation": "CO"
+  },
+  {
+    "id": 7,
+    "state_name": "Connecticut",
+    "state_abbreviation": "CT"
+  },
+  {
+    "id": 8,
+    "state_name": "Delaware",
+    "state_abbreviation": "DE"
+  },
+  {
+    "id": 9,
+    "state_name": "Florida",
+    "state_abbreviation": "FL"
+  },
+  {
+    "id": 10,
+    "state_name": "Georgia",
+    "state_abbreviation": "GA"
+  },
+  {
+    "id": 11,
+    "state_name": "Hawaii",
+    "state_abbreviation": "HI"
+  },
+  {
+    "id": 12,
+    "state_name": "Idaho",
+    "state_abbreviation": "ID"
+  },
+  {
+    "id": 13,
+    "state_name": "Illinois",
+    "state_abbreviation": "IL"
+  },
+  {
+    "id": 14,
+    "state_name": "Indiana",
+    "state_abbreviation": "IN"
+  },
+  {
+    "id": 15,
+    "state_name": "Iowa",
+    "state_abbreviation": "IA"
+  },
+  {
+    "id": 16,
+    "state_name": "Kansas",
+    "state_abbreviation": "KS"
+  },
+  {
+    "id": 17,
+    "state_name": "Kentucky",
+    "state_abbreviation": "KY"
+  },
+  {
+    "id": 18,
+    "state_name": "Louisiana",
+    "state_abbreviation": "LA"
+  },
+  {
+    "id": 19,
+    "state_name": "Maine",
+    "state_abbreviation": "ME"
+  },
+  {
+    "id": 20,
+    "state_name": "Maryland",
+    "state_abbreviation": "MD"
+  },
+  {
+    "id": 21,
+    "state_name": "Massachusetts",
+    "state_abbreviation": "MA"
+  },
+  {
+    "id": 22,
+    "state_name": "Michigan",
+    "state_abbreviation": "MI"
+  },
+  {
+    "id": 23,
+    "state_name": "Minnesota",
+    "state_abbreviation": "MN"
+  },
+  {
+    "id": 24,
+    "state_name": "Mississippi",
+    "state_abbreviation": "MS"
+  },
+  {
+    "id": 25,
+    "state_name": "Missouri",
+    "state_abbreviation": "MO"
+  },
+  {
+    "id": 26,
+    "state_name": "Montana",
+    "state_abbreviation": "MT"
+  },
+  {
+    "id": 27,
+    "state_name": "Nebraska",
+    "state_abbreviation": "NE"
+  },
+  {
+    "id": 28,
+    "state_name": "Nevada",
+    "state_abbreviation": "NV"
+  },
+  {
+    "id": 29,
+    "state_name": "New Hampshire",
+    "state_abbreviation": "NH"
+  },
+  {
+    "id": 30,
+    "state_name": "New Jersey",
+    "state_abbreviation": "NJ"
+  },
+  {
+    "id": 31,
+    "state_name": "New Mexico",
+    "state_abbreviation": "NM"
+  },
+  {
+    "id": 32,
+    "state_name": "New York",
+    "state_abbreviation": "NY"
+  },
+  {
+    "id": 33,
+    "state_name": "North Carolina",
+    "state_abbreviation": "NC"
+  },
+  {
+    "id": 34,
+    "state_name": "North Dakota",
+    "state_abbreviation": "ND"
+  },
+  {
+    "id": 35,
+    "state_name": "Ohio",
+    "state_abbreviation": "OH"
+  },
+  {
+    "id": 36,
+    "state_name": "Oklahoma",
+    "state_abbreviation": "OK"
+  },
+  {
+    "id": 37,
+    "state_name": "Oregon",
+    "state_abbreviation": "OR"
+  },
+  {
+    "id": 38,
+    "state_name": "Pennsylvania",
+    "state_abbreviation": "PA"
+  },
+  {
+    "id": 39,
+    "state_name": "Rhode Island",
+    "state_abbreviation": "RI"
+  },
+  {
+    "id": 40,
+    "state_name": "South Carolina",
+    "state_abbreviation": "SC"
+  },
+  {
+    "id": 41,
+    "state_name": "South Dakota",
+    "state_abbreviation": "SD"
+  },
+  {
+    "id": 42,
+    "state_name": "Tennessee",
+    "state_abbreviation": "TN"
+  },
+  {
+    "id": 43,
+    "state_name": "Texas",
+    "state_abbreviation": "TX"
+  },
+  {
+    "id": 44,
+    "state_name": "Utah",
+    "state_abbreviation": "UT"
+  },
+  {
+    "id": 45,
+    "state_name": "Vermont",
+    "state_abbreviation": "VT"
+  },
+  {
+    "id": 46,
+    "state_name": "Virginia",
+    "state_abbreviation": "VA"
+  },
+  {
+    "id": 47,
+    "state_name": "Washington",
+    "state_abbreviation": "WA"
+  },
+  {
+    "id": 48,
+    "state_name": "West Virginia",
+    "state_abbreviation": "WV"
+  },
+  {
+    "id": 49,
+    "state_name": "Wisconsin",
+    "state_abbreviation": "WI"
+  },
+  {
+    "id": 50,
+    "state_name": "Wyoming",
+    "state_abbreviation": "WY"
+  }
+]
   useEffect(() => {
-    // Define an asynchronous function inside the effect
-    async function fetchStates() {
-      const { data, error } = await supabase.from("states").select();
+    // async function fetchStates() {
+    //   const { data, error } = await supabase.from("states").select();
 
-      if (error) {
-        console.error("Error fetching states:", error);
-      } else {
-        setStates(data);
-      }
-    }
-    fetchStates();
+    //   if (error) {
+    //     console.error("Error fetching states:", error);
+    //   } else {
+    //     setStates(data);
+    //   }
+    // }
+    // fetchStates();
 
     const checkUser = async () => {
       if (user.isLoggedIn && typeof user.userAddress1 === 'undefined') { // Check for undefined
@@ -130,20 +381,19 @@ export default function Profile() {
                             
                         </div>
                         <div className='flex justify-end items-end	' style={{marginLeft:"8.8rem"}}>
-                        {editMode ? (
-                            <>                      
-                            </>
-                        ) : (<><button
-                            className="flex items-center justify-center bg-blue-500 w-28 h-8 rounded"
-                            onClick={() => setEditMode(true)}
-                            >
-                            <img
-                                src="/images/edit.png"
-                                alt="Edit"
-                                className="filter invert w-5 h-5  mr-2" // Proper margin between icon and text
-                            />
-                            <span className="text-white  text-xs align-middle  text-center	">Edit</span>
-                            </button></>)}
+                        
+                            <button
+                              className="flex items-center justify-center bg-blue-500 w-28 h-8 rounded"
+                              onClick={() => setEditMode(true)}
+                              data-testid="editbutton"
+                              >
+                              <img
+                                  src="/images/edit.png"
+                                  alt="Edit"
+                                  className="filter invert w-5 h-5  mr-2" // Proper margin between icon and text
+                              />
+                              <span className="text-white  text-xs align-middle  text-center	">Edit</span>
+                            </button>
                         
                     </div>
                 </div>
@@ -329,6 +579,7 @@ export default function Profile() {
                   </button>
                     
                   <button
+                    data-testid="sumbit-edit"
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >

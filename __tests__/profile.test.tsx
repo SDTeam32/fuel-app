@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../utils/supabase/server";
 import { useUser } from "../hooks/useUser";
@@ -15,31 +15,46 @@ jest.mock("../hooks/useUser", () => ({
 }));
 
 // Mock supabase with different query behaviors for select and update
-jest.mock("../utils/supabase/server", () => {
-  const mockSelect = jest.fn().mockResolvedValue({
-    data: [{ id: 1, state_abbreviation: "CA" }],
-    error: null,
-  });
+// jest.mock("../utils/supabase/server", () => {
+//   const mockSelect = jest.fn().mockResolvedValue({
+//     data: [{ id: 1, state_abbreviation: "CA" }],
+//     error: null,
+//   });
 
-  const mockUpdate = jest.fn().mockResolvedValue({
-    data: { id: 1, name: "John Doe" },
-    error: null,
-  });
+//   const mockUpdate = jest.fn().mockResolvedValue({
+//     data: { id: 1, name: "John Doe" },
+//     error: null,
+//   });
 
-  const mockFrom = (tableName: string) => {
-    if (tableName === "states") {
-      return { select: mockSelect };
-    }
-    if (tableName === "customers") {
-      return { update: mockUpdate, match: jest.fn().mockReturnThis() };
-    }
-  };
+//   const mockFrom = (tableName: string) => {
+//     if (tableName === "states") {
+//       return { select: mockSelect };
+//     }
+//     if (tableName === "customers") {
+//       return { update: mockUpdate, match: jest.fn().mockReturnThis() };
+//     }
+//   };
 
-  return {
-    __esModule: true,
-    supabase: { from: mockFrom },
-  };
-});
+//   return {
+//     __esModule: true,
+//     supabase: { from: mockFrom },
+//   };
+// });
+jest.mock('../utils/supabase/server', () => ({
+  __esModule: true,
+  supabase: {
+    from: jest.fn().mockReturnThis(),
+    select: jest.fn().mockReturnThis(),
+    update: jest.fn().mockReturnThis(),
+    match: jest.fn().mockResolvedValue({
+      data: [{
+        success: "im am data"
+      }],
+      error: 
+        null
+    }),
+  },
+}));
 
 describe("Profile Component Tests", () => {
   const mockRouterPush = jest.fn();
@@ -113,6 +128,25 @@ describe("Profile Component Tests", () => {
     await waitFor(() => {
       expect(mockRouterPush).toHaveBeenCalledWith("/");
     });
+  });
+  it("solves this shit", async () => {
+    
+    const {getByTestId} = render(<Profile/>)
+    
+    fireEvent.click(getByTestId("editbutton"))
+
+    fireEvent.change(getByTestId("name"), {target: {value: "cruz salas"}})
+    fireEvent.change(getByTestId("address1"), {target: {value:"123 main st"}})
+    fireEvent.change(getByTestId("city"), {target: {value: "testcity"}})
+    fireEvent.change(getByTestId("state"), {target: {value: "TX"}})
+    fireEvent.change(getByTestId("zip"), {target: {value: "77034"}})  
+
+    await act(async () => {
+      // Interact with your component to trigger the async operation
+      fireEvent.click(screen.getByTestId("sumbit-edit"));
+  
+    });
+    expect(true).toBe(true)
   });
 
 

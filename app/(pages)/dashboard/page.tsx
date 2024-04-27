@@ -36,16 +36,16 @@ export default function Dashboard() {
 
     useEffect(()=> {
         getQuotes()
-            .catch(console.error)
-            const checkUser = async () => {
-                if (user.isLoggedIn && typeof user.userAddress1 === 'undefined') { // Check for undefined
-                  // If userAddress1 is undefined, log out and redirect
-                  await user.logoutUser(); // Assuming logoutUser is asynchronous
-                  router.push('/'); // Redirect after logging out
-                }
-              };
-          
-              checkUser(); // Call the asynchronous function to check user address
+            // .catch(console.error)
+        const checkUser = async () => {
+            if (user.isLoggedIn && typeof user.userAddress1 === 'undefined') { // Check for undefined
+              // If userAddress1 is undefined, log out and redirect
+              await user.logoutUser(); // Assuming logoutUser is asynchronous
+              router.push('/'); // Redirect after logging out
+            }
+        };
+        
+          checkUser(); // Call the asynchronous function to check user address
 
     }, [getQuotes])
     
